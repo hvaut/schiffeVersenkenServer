@@ -72,6 +72,8 @@ public class Game
      */
     public boolean checkEnd()
     {
+        //if(board1.checkShips()) return false;
+        //if(board2.checkShips()) return false;
         Field[][] board = board1.getBoard();
         for(int i = 0; i < 10; i++)
         {
