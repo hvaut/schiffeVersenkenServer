@@ -30,6 +30,11 @@ public class Board
         ships[1] = 3;   // Length 3 ships
         ships[2] = 2;   // Length 4 ships
         ships[3] = 1;   // Length 5 ships
+        for(int i = 0;i<boardSize;i++) {
+            for(int j = 0;i<boardSize;j++) {
+                field[i][j] = new Water();
+            }
+        }
     }
 
     /**
@@ -37,20 +42,66 @@ public class Board
      * 
      * @return       
      */
-    public boolean checkPlacement()
+    private boolean checkPlacement(int x1,int y1,int x2,int y2)
     {
         //TODO
         return true;
     }
-    
+
     /**
      * TODO
-     *   
-     * @return        
+     * 
+     * @return       
      */
-    public boolean checkShoot()
+    private int shipLength(int x1,int y1,int x2,int y2)
     {
-        //TODO
+        int length = Math.abs(x1-x2)+Math.abs(y1-y2);
+        return length;
+    }
+
+    /**
+     * TODO
+     * 
+     * @return       
+     */
+    public void placeShip(int x1,int y1,int x2,int y2)
+    {
+        if(checkPlacement(x1,x2,y1,y2)){
+            Ship pShip = new Ship(x1,x2,y1,y2,shipLength(x1,x2,y1,y2));
+            for(int i=x1;i<=x2;i++) {
+                for(int j=y1;j<=y2;j++) {
+                    field[i][j] = new ShipField(pShip);
+                }    
+            }
+        }
+    }
+
+    /**
+     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
+     * 
+     * @param  x   The x Coordinate of the attempted shot
+     * @param  y   The y Coordinate of the attempted shot
+     * @return	    Valid
+     */
+    private boolean checkShot(int x, int y)
+    {
+        if(x>=boardSize || y>=boardSize) {
+            return false;
+        }
         return true;
+    }
+
+    /**
+     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
+     * 
+     * @param  x   The x Coordinate of the attempted shot
+     * @param  y   The y Coordinate of the attempted shot
+     * @return	    Valid
+     */
+    private void processShot(int x, int y)
+    {
+        if(checkShot(x,y)){
+
+        }
     }
 }

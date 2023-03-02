@@ -11,14 +11,16 @@ public class Ship
     private int x2;
     private int y1;
     private int y2;
+    private int length;
     /**
      * Construktor for objectes of the class Ship
      */
-    public Ship(int x1,int x2,int y1,int y2)
+    public Ship(int x1,int x2,int y1,int y2,int length)
     {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
+        this.length = length;
     }
 }
