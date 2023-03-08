@@ -72,6 +72,25 @@ public class Game
                     server.send(player.getIp(), player.getPort(), "-SHOOT:Not your turn");
                 }
                 server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board1.processShot(x, y));
+                if(!board1.checkShot(x, y))
+
+                {
+                    if(!board1.checkShot(x, y))//checks if the shot is invalid
+                    {
+                        server.send(player.getIp(), player.getPort(), "-SHOOT:position invalid");
+                        sendNextMove(player);
+                        return;
+                    }
+                    int result = board1.processShot(x, y); //result of the shot given as an integer
+                    server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                    server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+                    sendNextMove(player2);
+                }
+                else
+                {
+                    server.send(player.getIp(), player.getPort(), "-SHOOT:Not your turn");
+                }
+                server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board1.processShot(x, y));
                 sendNextMove(player2);
             }
         }
@@ -79,6 +98,24 @@ public class Game
         {
             if(player1Turn)
             {
+                if(!board2.checkShot(x, y))
+                {
+                    if(!board2.checkShot(x, y))//checks if the shot is invalid
+                    {
+                        server.send(player.getIp(), player.getPort(), "-SHOOT:position invalid");
+                        sendNextMove(player);
+                        return;
+                    }
+                    int result = board2.processShot(x, y);//result of the shot given as an integer
+                    server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+                    server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                    sendNextMove(player1);
+                }
+                else
+                {
+                    server.send(player.getIp(), player.getPort(), "-SHOOT:Not your turn");
+                }
+                server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board2.processShot(x, y));
                 if(!board2.checkShot(x, y))
                 {
                     if(!board2.checkShot(x, y))//checks if the shot is invalid
