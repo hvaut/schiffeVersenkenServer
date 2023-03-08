@@ -7,7 +7,11 @@
  */
 public class Game
 {
-
+    private class Lobby{
+        public void send(String s, int i, String message)
+        {
+        }
+    }
     private Board board1;
     private Board board2;
     private User player1;
@@ -46,19 +50,19 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            board1.shoot(x, y);
+            //board1.shoot(x, y);
             sendNextMove(player2);
         }
         else
         {
-            board2.shoot(x, y);
+            //board2.shoot(x, y);
             sendNextMove(player1);
         }
     }
 
     /**
      * Methode sendNextMove
-     * gives a notification to the player
+     * gives a notification to the player that it's his turn
      */
     public void sendNextMove(User player)
     {
@@ -74,12 +78,12 @@ public class Game
     {
         //if(board1.checkShips()) return false;
         //if(board2.checkShips()) return false;
-        Field[][] board = board1.getBoard();
+        //Field[][] board = board1.getBoard();
         for(int i = 0; i < 10; i++)
         {
             for(int j = 0; j < 10; j++)
             {
-                if(!board[i][j].isHit()) return false;
+                //if(!board[i][j].isHit()) return false;
             }
         }
         return true;

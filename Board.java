@@ -6,11 +6,6 @@
  */
 public class Board
 {   
-    //Delete later
-    private class User{
-    }
-    private class Game{
-    }
     //Attributes
     private User player;
     private int[] ships;
