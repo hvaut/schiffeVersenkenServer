@@ -6,11 +6,6 @@
  */
 public class Board
 {   
-    //Delete later
-    private class User{
-    }
-    private class Game{
-    }
     //Attributes
     private User player;
     private int[] ships;
@@ -81,9 +76,9 @@ public class Board
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
-     * @return	    Valid
+     * @return        Valid
      */
-    private boolean checkShot(int x, int y)
+    public boolean checkShot(int x, int y)
     {
         if(x>=boardSize || y>=boardSize) {
             return false;
@@ -96,9 +91,9 @@ public class Board
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
-     * @return	    Valid
+     * @return        Valid
      */
-    private void processShot(int x, int y)
+    private int processShot(int x, int y)
     {
         if(checkShot(x,y)){
 
