@@ -83,6 +83,9 @@ public class Board
         if(x>=boardSize || y>=boardSize) {
             return false;
         }
+        if(field[x][y].isHit()) {
+            return false;    
+        }
         return true;
     }
 
@@ -91,12 +94,20 @@ public class Board
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
-     * @return        Valid
+     * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit
+     * 
+     * 
+     * 
      */
     private int processShot(int x, int y)
     {
         if(checkShot(x,y)){
-
+            return 0;
         }
+        if(Water.equals(field[x][y].getClass()))  {
+            return 1;
+        } else if(ShipField.equals(field[x][y].getClass()))  {
+            return 2;
+        }
+        return 0;
     }
-}
