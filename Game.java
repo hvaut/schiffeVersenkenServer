@@ -46,22 +46,22 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            if(!board1.checkShoot(x, y))
+            if(!board1.checkShot(x, y))
             {
                 sendNextMove(player1);
                 return;
             }
-            server.send(player.getIp(), player.getPort(), "String");
+            server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board1.processShot(x, y));
             sendNextMove(player2);
         }
         else
         {
-            if(!board2.checkShoot(x, y))
+            if(!board2.checkShot(x, y))
             {
                 sendNextMove(player2);
                 return;
             }
-            server.send(player.getIp(), player.getPort(), "String");
+            server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board2.processShot(x, y));
             sendNextMove(player1);
         }
     }
