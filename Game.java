@@ -51,7 +51,7 @@ public class Game
                 sendNextMove(player1);
                 return;
             }
-            //server.send(player.ip(), player.port(), "String");
+            server.send(player.ip(), player.port(), "FIELDUPDATE:" + x + ":" + y + board1.processShot(x, y));
             sendNextMove(player2);
         }
         else
@@ -61,7 +61,7 @@ public class Game
                 sendNextMove(player2);
                 return;
             }
-            //server.send(player.ip(), player.port(), "String");
+            server.send(player.ip(), player.port(), "FIELDUPDATE:" + x + ":" + y + board2.processShot(x, y));
             sendNextMove(player1);
         }
     }

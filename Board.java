@@ -93,7 +93,7 @@ public class Board
      * @param  y   The y Coordinate of the attempted shot
      * @return        Valid
      */
-    private int processShot(int x, int y)
+    public int processShot(int x, int y)
     {
         if(checkShoot(x,y)){
 
