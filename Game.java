@@ -46,12 +46,22 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            board1.shoot(x, y);
+            if(!board1.checkShoot(x, y))
+            {
+                sendNextMove(player1);
+                return;
+            }
+            server.send(player.getIp(), player.getPort(), "String");
             sendNextMove(player2);
         }
         else
         {
-            board2.shoot(x, y);
+            if(!board2.checkShoot(x, y))
+            {
+                sendNextMove(player2);
+                return;
+            }
+            server.send(player.getIp(), player.getPort(), "String");
             sendNextMove(player1);
         }
     }
@@ -74,7 +84,7 @@ public class Game
     {
         //if(board1.checkShips()) return false;
         //if(board2.checkShips()) return false;
-        Field[][] board = board1.getBoard();
+        //Field[][] board = board1.getBoard();
         for(int i = 0; i < 10; i++)
         {
             for(int j = 0; j < 10; j++)
