@@ -44,14 +44,14 @@ public class Game
      */
     public void shoot(int x, int y, User player)
     {
-        if(player.getName().equals(player1.getName()))
+        if(player.name().equals(player1.name()))
         {
             if(!board1.checkShoot(x, y))
             {
                 sendNextMove(player1);
                 return;
             }
-            server.send(player.getIp(), player.getPort(), "String");
+            //server.send(player.ip(), player.port(), "String");
             sendNextMove(player2);
         }
         else
@@ -61,7 +61,7 @@ public class Game
                 sendNextMove(player2);
                 return;
             }
-            server.send(player.getIp(), player.getPort(), "String");
+            //server.send(player.ip(), player.port(), "String");
             sendNextMove(player1);
         }
     }
@@ -72,7 +72,7 @@ public class Game
      */
     public void sendNextMove(User player)
     {
-        server.send(player.getIp(), player.getPort(), "ACTIVEUSER:" + player.getName());
+        //server.send(player.ip(), player.port(), "ACTIVEUSER:" + player.name());
     }
 
     /**
@@ -84,7 +84,7 @@ public class Game
     {
         //if(board1.checkShips()) return false;
         //if(board2.checkShips()) return false;
-        //Field[][] board = board1.getBoard();
+        Field[][] board = board1.getBoard();
         for(int i = 0; i < 10; i++)
         {
             for(int j = 0; j < 10; j++)
