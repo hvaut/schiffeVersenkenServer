@@ -78,7 +78,7 @@ public class Board
      * @param  y   The y Coordinate of the attempted shot
      * @return        Valid
      */
-    public boolean checkShot(int x, int y)
+    public boolean checkShoot(int x, int y)
     {
         if(x>=boardSize || y>=boardSize) {
             return false;
@@ -95,8 +95,14 @@ public class Board
      */
     public int processShot(int x, int y)
     {
-        if(checkShot(x,y)){
+        if(checkShoot(x,y)){
 
         }
+        return 0;
+    }
+    
+    public Field[][] getBoard() 
+    {
+        return null;
     }
 }
