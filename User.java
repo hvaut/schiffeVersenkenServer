@@ -26,3 +26,6 @@ public class User
         return 2;
     }
 }
+/*public record User(String ip, String port, String name) 
+{
+}*/

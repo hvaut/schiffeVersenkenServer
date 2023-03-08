@@ -3,7 +3,7 @@
  * Beschreiben Sie hier die Klasse Game.
  * 
  * @author Leon Stobbe/Georg Seiler 
- * @version 01.03.2023
+ * @version 08.03.2023
  */
 public class Game
 {
@@ -18,6 +18,7 @@ public class Game
     private User player2;
     private Lobby server;
     private int state = 0;//0 = place; 1 = game; 2 = end
+    private boolean player1Turn = true;//if true, it's player1's turn (used in the shoot method
     public Game(User _player1, User _player2, Lobby _server)
     {
         player1 = _player1;
@@ -50,23 +51,66 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            //board1.shoot(x, y);
-            sendNextMove(player2);
+            if(!player1Turn)
+            {
+                if(!board1.checkShot(x, y))
+
+                {
+                    if(!board1.checkShot(x, y))//checks if the shot is invalid
+                    {
+                        server.send(player.getIp(), player.getPort(), "-SHOOT:position invalid");
+                        sendNextMove(player);
+                        return;
+                    }
+                    int result = board1.processShot(x, y); //result of the shot given as an integer
+                    server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                    server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+                    sendNextMove(player2);
+                }
+                else
+                {
+                    server.send(player.getIp(), player.getPort(), "-SHOOT:Not your turn");
+                }
+                server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board1.processShot(x, y));
+                sendNextMove(player2);
+            }
         }
         else
         {
-            //board2.shoot(x, y);
-            sendNextMove(player1);
+            if(player1Turn)
+            {
+                if(!board2.checkShot(x, y))
+                {
+                    if(!board2.checkShot(x, y))//checks if the shot is invalid
+                    {
+                        server.send(player.getIp(), player.getPort(), "-SHOOT:position invalid");
+                        sendNextMove(player);
+                        return;
+                    }
+                    int result = board2.processShot(x, y);//result of the shot given as an integer
+                    server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+                    server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                    sendNextMove(player1);
+                }
+                else
+                {
+                    server.send(player.getIp(), player.getPort(), "-SHOOT:Not your turn");
+                }
+                server.send(player.getIp(), player.getPort(), "FIELDUPDATE:" + x + ":" + y + board2.processShot(x, y));
+                sendNextMove(player1);
+            }
         }
     }
 
     /**
      * Methode sendNextMove
      * gives a notification to the player that it's his turn
+     * gives a notification to the player
+     * @param player player that has to make a move now
      */
     public void sendNextMove(User player)
     {
-        server.send(player.getIp(), player.getPort(), "ACTIVEUSER:" + player.getName());
+        //server.send(player.ip(), player.port(), "ACTIVEUSER:" + player.name());
     }
 
     /**
@@ -76,17 +120,7 @@ public class Game
      */
     public boolean checkEnd()
     {
-        //if(board1.checkShips()) return false;
-        //if(board2.checkShips()) return false;
-        //Field[][] board = board1.getBoard();
-        for(int i = 0; i < 10; i++)
-        {
-            for(int j = 0; j < 10; j++)
-            {
-                //if(!board[i][j].isHit()) return false;
-            }
-        }
-        return true;
+        return false;
     }
 
     /**
