@@ -12,62 +12,75 @@ public class User
     String ip;
     int port;
     Game game;
-    int gameslost = 0;
-    int gameswon = 0;
+    int gamesLost = 0;
+    int gamesWon = 0;
 
     /**
      * Konstruktor für Objekte der Klasse User
      */
-    public User(String pusername, String ppassword, String pip, int pport)
+    public User(String _username, String _password, String _ip, int _port)
     {
-        username = pusername;
-        password = ppassword;
-        ip = pip;
-        port = pport;
+        username = _username;
+        password = _password;
+        ip = _ip;
+        port = _port;
     }
 
-    private String getUsername(){
+    private String getUsername()
+    {
         return username;
     }
 
-    private String getPassword(){
+    private String getPassword()
+    {
         return password;
     }
 
-    private String getIp(){
+    private String getIp()
+    {
         return ip;
     }
 
-    private int getPort(){
+    private int getPort()
+    {
         return port;
     }
 
-    private Game getGame(){
+    private Game getGame()
+    {
         return game;
     }
 
-    private int getWins(){
+    private int getWins()
+    {
         return gameswon;
     }
 
-    private void increaseWins(){}
+    private void increaseWins()
+    {
+        gamesWon++;
+    }
 
-    private int getLosses(){
+    private int getLosses()
+    {
         return gameslost;
     }
 
-    private void increaseLosses(){}
-
-    private void setPort(int pport){
-        port = pport;
+    private void increaseLosses()
+    {
+        gamesLost++;
     }
 
-    private void setIp(String pip){
-        ip = pip;
+    private void setPort(int _port){
+        port = _port;
     }
 
-    private void setGame(Game pgame){
-        game = pgame;
+    private void setIp(String _ip){
+        ip = _ip;
+    }
+
+    private void setGame(Game _game){
+        game = _game;
     }
 
 }
