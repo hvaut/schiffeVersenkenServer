@@ -53,7 +53,7 @@ public class User
 
     private int getWins()
     {
-        return gameswon;
+        return gamesWon;
     }
 
     private void increaseWins()
@@ -63,7 +63,7 @@ public class User
 
     private int getLosses()
     {
-        return gameslost;
+        return gamesLost;
     }
 
     private void increaseLosses()

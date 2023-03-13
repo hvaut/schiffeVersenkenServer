@@ -1,4 +1,4 @@
-/**
+    /**
  * Beschreiben Sie hier die Klasse Game.
  * 
  * @author Leon Stobbe/Georg Seiler 
@@ -122,6 +122,11 @@ public class Game
                 server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
                 server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
                 player1Turn = false;//changes the active player
+                if(checkEnd())
+                {
+                    endGame();
+                    return;
+                }
                 sendNextMove(player2);//sends the other player a notification
             }
             else
@@ -155,6 +160,11 @@ public class Game
                 server.send(player1.getIp(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
                 server.send(player2.getIp(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
                 player1Turn = true;//changes the active player
+                if(checkEnd())
+                {
+                    endGame();
+                    return;
+                }
                 sendNextMove(player1);//sends the other player a notification
             }
             else
@@ -185,6 +195,11 @@ public class Game
         if(board1.checkEnd()) return true;
         if(board2.checkEnd()) return true;
         return false;
+    }
+    
+    public void endGame()
+    {
+        server.endGame(player1, player2, board1.checkEnd());
     }
 
     /**
