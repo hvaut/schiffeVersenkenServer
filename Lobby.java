@@ -50,11 +50,11 @@ public class Lobby extends Server
                 password = true;
             }
         }
-        
+
         if (name == true && password == true){
             playerLobby.append(tmp);
         }
-        
+
         else if (name == false){
             userlist.append(tmp);
             playerLobby.append(tmp);
@@ -101,23 +101,64 @@ public class Lobby extends Server
     }
 
     /**
-     * Methode startGame starts a new game and adds the two Users to the games list
+     * Method startGame starts a new game and adds the two Users to the games list
+     * To avoid getting invalid requests we remove both users from the playerLobby list
      * Requires a lobby and two Users to start a new game
      */
     public void startGame(Lobby this, User p1, User p2){
-        
+        Game newGame = new Game(p1, p2, this);
+
+        //Adding both users to the games list
+        games.append(p1);
+        games.append(p2);
+
+        //removing both users from the playerLobby list
+        playerLobby.toFirst();
+        while (playerLobby.hasAccess()){
+            if (playerLobby.getContent() == p1){
+                playerLobby.remove();
+            }
+            else{playerLobby.next();}
+        }
+        while (playerLobby.hasAccess()){
+            if (playerLobby.getContent() == p2){
+                playerLobby.remove();
+            }
+            else{playerLobby.next();}
+        }
     }
 
     /**
-     * Methode endGame ends a game
+     * Method endGame ends a game
      * Requires two Users
-     * @param
+     * 
      */
-    public void endGame(User p1, User p2, boolean pWon){}
+    public void endGame(User p1, User p2, boolean pWon){
+        //Adding both users to the playerLobby list
+        playerLobby.append(p1);
+        playerLobby.append(p2);
+
+        //Removing both users from the games list
+        games.toFirst();
+        while (games.hasAccess()){
+            if (games.getContent() == p1){
+                games.remove();
+            }
+            else{games.next();}
+        }
+        while (games.hasAccess()){
+            if (games.getContent() == p2){
+                games.remove();
+            }
+            else{games.next();}
+        }
+    }
+
+    public void processMessage(String pClientIP, int pClientPort, String pMessage){
+        
+    }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
-
-    public void processMessage(String pClientIP, int pClientPort, String pMessage){}
 
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }

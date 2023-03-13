@@ -48,10 +48,10 @@ public class Board
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
             //Check if ship length is valid and a ship available
-            if (pShip.shipLength() == 2 && ships[0] > 0
-                || pShip.shipLength() == 3 && ships[1] > 0
-                || pShip.shipLength() == 4 && ships[2] > 0
-                || pShip.shipLength() == 5 && ships[3] > 0)
+            if (pShip.length() == 2 && ships[0] > 0
+                || pShip.length() == 3 && ships[1] > 0
+                || pShip.length() == 4 && ships[2] > 0
+                || pShip.length() == 5 && ships[3] > 0)
             return true;
         } 
         
