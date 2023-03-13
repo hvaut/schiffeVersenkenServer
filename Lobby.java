@@ -1,8 +1,8 @@
 /**
  * Beschreiben Sie hier die Klasse Lobby.
  * 
- * @author John Braun 
- * @version 1.0
+ * @author Nikita Funk und John Braun
+ * @version 13.03.2023
  */
 public class Lobby extends Server
 {
@@ -34,40 +34,34 @@ public class Lobby extends Server
     public void login (String pUsername, String pPassword, String pIP, int pPort){
         User tmp = new User(pUsername, pPassword, pIP, pPort);
         userlist.toFirst();
-        boolean name = false;
-        
-        while (userlist.hasAccess()){
-        //Name überprüfen
-        if (userlist.getContent().getName() == tmp.getName())
-        {
-            name = true;
-        }
-        else{userlist.next();}
-        }
-        
-/**
+        boolean name, password = false;
+
+        //Verifying username
         while (userlist.hasAccess()){
             if (userlist.getContent().getName() == tmp.getName())
             {
-                if(userlist.getContent().getPassword() == tmp.getPassword())
-                {
-                    playerLobby.append(tmp);
-                    break;
-                }
-                else if(userlist.getContent().getPassword() != tmp.getPassword())
-                {
-                    break;
-                    //Falsches Passwort oder Name ist vergeben!
-                }
+                name = true;
             }
-            
-            else if (userlist.getContent().getName() != tmp.getName())
-            {
-                
-            }
-            
             else{userlist.next();}
-        }**/
+        }
+        //Verifying password 
+        while (userlist.hasAccess()){
+            if (userlist.getContent().getPassword() == tmp.getPassword()){
+                password = true;
+            }
+        }
+        
+        if (name == true && password == true){
+            playerLobby.append(tmp);
+        }
+        
+        else if (name == false){
+            userlist.append(tmp);
+            playerLobby.append(tmp);
+        }
+        else if (name == true && password == false){
+            return;
+        }
     }
 
     /**
@@ -111,16 +105,19 @@ public class Lobby extends Server
      * Requires a lobby and two Users to start a new game
      */
     public void startGame(Lobby this, User p1, User p2){
-
+        
     }
 
     /**
      * Methode endGame ends a game
-     * 
+     * Requires two Users
+     * @param
      */
     public void endGame(User p1, User p2, boolean pWon){}
 
     public void processNewConnection(String pClientIP, int pClientPort){}
+
     public void processMessage(String pClientIP, int pClientPort, String pMessage){}
+
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }
