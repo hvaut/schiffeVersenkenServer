@@ -99,6 +99,26 @@ public class Lobby extends Server
         }
         return player;
     }
+    
+    /**
+     * Method request
+     *
+     * @param p1 Ein Parameter
+     */
+    public void request(User p1){
+        playerLobby.toFirst();
+        boolean playerIsAvailable = false;
+        while(playerLobby.hasAccess()){
+            if (playerLobby.getContent() == p1){
+                playerIsAvailable = true;
+            }
+            else{playerLobby.next();}
+        }
+        if (playerIsAvailable == true){
+            send("+GETREQUEST:");
+        }
+        else{return;}
+    }
 
     /**
      * Method startGame starts a new game and adds the two Users to the games list
@@ -155,7 +175,24 @@ public class Lobby extends Server
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage){
+        String[] Message = pMessage.split(":");
         
+        switch (Message[0]){
+            case "LOGIN":
+                login(Message[1], Message[2], pClientIP, pClientPort);
+                send("STATUS:LOBBY");
+                break;
+            
+            case "LOGOUT":
+                logout(pClientIP, pClientPort);
+                send("STATUS:LOGIN");
+                break;
+            
+            case "REQUESTENEMY":
+                request(Message[1]);
+                break;
+                
+        }
     }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
