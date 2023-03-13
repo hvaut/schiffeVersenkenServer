@@ -1,4 +1,3 @@
-
 /**
  * Beschreiben Sie hier die Klasse Game.
  * 
@@ -38,6 +37,14 @@ public class Game
      */
     public void place(int x1, int y1, int x2, int y2, User player)
     {
+        if(player.getName().equals(player1.getName()))
+        {
+            board1.placeShip(x1,y1,x2,y2);
+        }
+        else
+        {
+            board2.placeShip(x1,y1,x2,y2);
+        }
     }
 
     /**
@@ -135,6 +142,8 @@ public class Game
      */
     public boolean checkEnd()
     {
+        if(board1.checkEnd()) return true;
+        if(board2.checkEnd()) return true;
         return false;
     }
 

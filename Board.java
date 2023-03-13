@@ -11,7 +11,7 @@ public class Board
     private int[] ships;
     private Field[][] field;
     private Game game;
-    private int boardSize = 10;
+    private final int boardSize = 10;
     /**
      * Construktor for objectes of the class Board
      */
@@ -59,17 +59,6 @@ public class Board
      * 
      * @return       
      */
-    private int shipLength(int x1,int y1,int x2,int y2)
-    {
-        int length = Math.abs(x1-x2)+Math.abs(y1-y2);
-        return length;
-    }
-
-    /**
-     * TODO
-     * 
-     * @return       
-     */
     public void placeShip(int x1,int y1,int x2,int y2)
     {
         if(checkPlacement(x1,x2,y1,y2)){
@@ -83,7 +72,7 @@ public class Board
     }
 
     /**
-     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
+     * Checks if the shot is vaild. 
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
@@ -107,19 +96,23 @@ public class Board
      * @param  y   The y Coordinate of the attempted shot
      * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit
      * 
-     * 
-     * 
      */
     public int processShot(int x, int y)
     {
         if(checkShot(x,y)){
             return 0;
         }
-        /*if(Water == field[x][y].getClass())  {
+        field[x][y].hit();
+        if(Water == field[x][y].getClass())  {
             return 1;
         } else if(ShipField ==field[x][y].getClass())  {
+            ShipField shipField = field[x][y];
+            if(shipField.getShip().)
             return 2;
-        }*/
+        }
         return 0;
+    }
+    public boolean checkEnd() {
+        return false;
     }
 }

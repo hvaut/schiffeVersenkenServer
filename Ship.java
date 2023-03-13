@@ -21,6 +21,32 @@ public class Ship
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
-        this.length = length;
+        this.length = shipLength(x1,y1,x2,y2);
+    }
+
+    public int length() {
+        return length;
+    }
+
+    public int x1() {
+        return x1;
+    }
+
+    public int x2() {
+        return x2;
+    }
+
+    public int y1() {
+        return y1;
+    }
+
+    public int y2() {
+        return y2;
+    }
+
+    private int shipLength(int x1,int y1,int x2,int y2)
+    {
+        int length = Math.abs(x1-x2)+Math.abs(y1-y2);
+        return length;
     }
 }
