@@ -112,7 +112,7 @@ public class Board
         if(field[x][y]instanceof Water)  {
             return ShotEvent.WATER;
         } else if(field[x][y]instanceof ShipField)  {
-            if(((shipField) field[x][y]).getShip().length()<=0){
+            if(((ShipField) field[x][y]).getShip().length()<=0){
                 return ShotEvent.SUNK;           
             }
             return ShotEvent.HIT;
