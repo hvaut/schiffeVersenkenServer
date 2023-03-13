@@ -37,17 +37,21 @@ public class Board
      * 
      * @return       
      */
-    private boolean checkPlacement(int x1,int y1,int x2,int y2)
+    private boolean checkPlacement(Ship pShip)
     {
         //Return false in case it's outside the board
-        if (x1 >= boardSize || x2 >= boardSize || y1 >= boardSize || y2 >= boardSize
-            || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0)
+        if (pShip.x1() >= boardSize || pShip.x2() >= boardSize || pShip.y1() >= boardSize || pShip.y2() >= boardSize
+            || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
             return false;
         
         //Invalidate in case the ship is not horizontally/vertically placed
-        if (x1 == x2 || y1 == y2) 
+        if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
-            //TODO
+            //Check if ship length is valid and a ship available
+            if (pShip.shipLength() == 2 && ships[0] > 0
+                || pShip.shipLength() == 3 && ships[1] > 0
+                || pShip.shipLength() == 4 && ships[2] > 0
+                || pShip.shipLength() == 5 && ships[3] > 0)
             return true;
         } 
         
@@ -61,8 +65,8 @@ public class Board
      */
     public void placeShip(int x1,int y1,int x2,int y2)
     {
-        if(checkPlacement(x1,x2,y1,y2)){
-            Ship pShip = new Ship(x1,x2,y1,y2,shipLength(x1,x2,y1,y2));
+        Ship pShip = new Ship(x1,x2,y1,y2,shipLength(x1,x2,y1,y2));
+        if(checkPlacement(pShip)){
             for(int i=x1;i<=x2;i++) {
                 for(int j=y1;j<=y2;j++) {
                     field[i][j] = new ShipField(pShip);
