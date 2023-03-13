@@ -67,12 +67,10 @@ public class Board
     {
         Ship pShip = new Ship(x1,x2,y1,y2);
         if(checkPlacement(pShip)){
-            if(checkPlacement(pShip)){
-                for(int i=x1;i<=x2;i++) {
-                    for(int j=y1;j<=y2;j++) {
-                        field[i][j] = new ShipField(pShip);
-                    }    
-                }
+            for(int i=x1;i<=x2;i++) {
+                for(int j=y1;j<=y2;j++) {
+                    field[i][j] = new ShipField(pShip);
+                }    
             }
         }
     }
