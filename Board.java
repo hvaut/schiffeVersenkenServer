@@ -39,8 +39,19 @@ public class Board
      */
     private boolean checkPlacement(int x1,int y1,int x2,int y2)
     {
-        //TODO
-        return true;
+        //Return false in case it's outside the board
+        if (x1 >= boardSize || x2 >= boardSize || y1 >= boardSize || y2 >= boardSize
+            || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0)
+            return false;
+        
+        //Invalidate in case the ship is not horizontally/vertically placed
+        if (x1 == x2 || y1 == y2) 
+        {
+            //TODO
+            return true;
+        } 
+        
+        return false;
     }
 
     /**
