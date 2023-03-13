@@ -59,6 +59,11 @@ public class Board
         } 
         return INVAILD;
     }
+    
+    public int[] getShips() 
+    {
+        return ships;
+    }
 
     /**
      * TODO
@@ -100,7 +105,6 @@ public class Board
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
      * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit, 3: ship sunk
-     * 
      */
     public ShotEvent processShot(int x, int y)
     {
