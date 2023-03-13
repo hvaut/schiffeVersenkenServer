@@ -1,4 +1,4 @@
-/**
+    /**
  * Beschreiben Sie hier die Klasse Game.
  * 
  * @author Leon Stobbe/Georg Seiler 
