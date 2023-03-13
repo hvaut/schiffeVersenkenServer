@@ -33,9 +33,12 @@ public class Board
     }
 
     /**
-     * TODO
+     * Checks if the placement of a ship is vaild. 
      * 
-     * @return       
+     * @param  pShip   The ship which should be checked
+     * @return         Returns true in case of a valid placement 
+     *                 and the amount of available ships for the length of pShip is greater than 0
+     *                 otherwise returns false.
      */
     private boolean checkPlacement(Ship pShip)
     {
@@ -47,7 +50,7 @@ public class Board
         //Invalidate in case the ship is not horizontally/vertically placed
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
-            //Check if ship length is valid and a ship available
+            //Check if ship length is valid and a ship is available
             if (pShip.length() == 2 && ships[0] > 0
             || pShip.length() == 3 && ships[1] > 0
             || pShip.length() == 4 && ships[2] > 0
@@ -109,7 +112,7 @@ public class Board
         if(field[x][y]instanceof Water)  {
             return ShotEvent.WATER;
         } else if(field[x][y]instanceof ShipField)  {
-            if(((shipField) field[x][y]).getShip().length()<=0){
+            if(((ShipField) field[x][y]).getShip().length()<=0){
                 return ShotEvent.SUNK;           
             }
             return ShotEvent.HIT;
