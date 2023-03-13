@@ -44,20 +44,20 @@ public class Board
     {
         //Return false in case it's outside the board
         if (pShip.x1() >= boardSize || pShip.x2() >= boardSize || pShip.y1() >= boardSize || pShip.y2() >= boardSize
-            || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
+        || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
             return false;
-        
+
         //Invalidate in case the ship is not horizontally/vertically placed
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
             //Check if ship length is valid and a ship is available
             if (pShip.length() == 2 && ships[0] > 0
-                || pShip.length() == 3 && ships[1] > 0
-                || pShip.length() == 4 && ships[2] > 0
-                || pShip.length() == 5 && ships[3] > 0)
-            return true;
+            || pShip.length() == 3 && ships[1] > 0
+            || pShip.length() == 4 && ships[2] > 0
+            || pShip.length() == 5 && ships[3] > 0)
+                return true;
         } 
-        
+
         return false;
     }
 
@@ -85,8 +85,7 @@ public class Board
      * @param  y   The y Coordinate of the attempted shot
      * @return        Valid
      */
-    public boolean checkShot(int x, int y)
-    {
+    public boolean checkShot(int x, int y){
         if(x>=boardSize || y>=boardSize) {
             return false;
         }
@@ -101,24 +100,26 @@ public class Board
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
-     * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit
+     * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit, 3: ship sunk
      * 
      */
-    public int processShot(int x, int y)
+    public ShotEvent processShot(int x, int y)
     {
         if(checkShot(x,y)){
-            return 0;
+            return ShotEvent.FAILED;
         }
         field[x][y].hit();
-        if(Water == field[x][y].getClass())  {
-            return 1;
-        } else if(ShipField ==field[x][y].getClass())  {
-            ShipField shipField = field[x][y];
-            if(shipField.getShip().)
-            return 2;
+        if(field[x][y]instanceof Water)  {
+            return ShotEvent.WATER;
+        } else if(field[x][y]instanceof ShipField)  {
+            if(((shipField) field[x][y]).getShip().length()<=0){
+                return ShotEvent.SUNK;           
+            }
+            return ShotEvent.HIT;
         }
-        return 0;
+        return ShotEvent.FAILED;
     }
+    //TODO Enumeration for error handeling
     public boolean checkEnd() {
         return false;
     }
