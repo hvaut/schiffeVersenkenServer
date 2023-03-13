@@ -99,15 +99,16 @@ public class Board
      * 
      * 
      */
-    private int processShot(int x, int y)
+    public int processShot(int x, int y)
     {
         if(checkShot(x,y)){
             return 0;
         }
-        if(Water == field[x][y].getClass())  {
+        /*if(Water == field[x][y].getClass())  {
             return 1;
         } else if(ShipField ==field[x][y].getClass())  {
             return 2;
-        }
+        }*/
         return 0;
     }
+}
