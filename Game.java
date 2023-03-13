@@ -18,7 +18,7 @@ public class Game
     private User player2;
     private Lobby server;
     private int state = 0;//0 = place; 1 = game; 2 = end
-    private boolean player1Turn = true;//if true, it's player1's turn (used in the shoot method
+    private boolean player1Turn = true;//if true, it's player1's turn (used in the shoot method)
     public Game(User _player1, User _player2, Lobby _server)
     {
         player1 = _player1;
@@ -40,11 +40,51 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            board1.placeShip(x1,y1,x2,y2);
+            int result = board1.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
+            switch(result)
+            {
+                case 0:
+                    server.send(player1.getIp(), player1.getPort(), "+SHOOT: miss");
+                    return;
+                case 1:
+                    server.send(player1.getIp(), player1.getPort(), "-PLACE: ship does not exist");
+                    return;
+                case 2:
+                    server.send(player1.getIp(), player1.getPort(), "-PLACE: ship is already placed");
+                    return;
+                case 3:
+                    server.send(player1.getIp(), player1.getPort(), "-PLACE: ship is out of bounds");
+                    return;
+                case 4:
+                    server.send(player1.getIp(), player1.getPort(), "-PLACE: placement is invalid");
+                    return;
+                default:
+
+            }
         }
         else
         {
-            board2.placeShip(x1,y1,x2,y2);
+            int result = board2.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
+            switch(result)
+            {
+                case 0:
+                    server.send(player2.getIp(), player2.getPort(), "+SHOOT: miss");
+                    return;
+                case 1:
+                    server.send(player2.getIp(), player2.getPort(), "-PLACE: ship does not exist");
+                    return;
+                case 2:
+                    server.send(player2.getIp(), player2.getPort(), "-PLACE: ship is already placed");
+                    return;
+                case 3:
+                    server.send(player2.getIp(), player2.getPort(), "-PLACE: ship is out of bounds");
+                    return;
+                case 4:
+                    server.send(player2.getIp(), player2.getPort(), "-PLACE: placement is invalid");
+                    return;
+                default:
+
+            }
         }
     }
 
