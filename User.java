@@ -1,31 +1,73 @@
 
 /**
- * Write a description of class User here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Beschreiben Sie hier die Klasse User.
+ * 
+ * @author (Ihr Name) 
+ * @version (eine Versionsnummer oder ein Datum)
  */
 public class User
 {
+    String username;
+    String password;
+    String ip;
+    int port;
+    Game game;
+    int gameslost = 0;
+    int gameswon = 0;
 
-    public User()
+    /**
+     * Konstruktor für Objekte der Klasse User
+     */
+    public User(String pusername, String ppassword, String pip, int pport)
     {
-
+        username = pusername;
+        password = ppassword;
+        ip = pip;
+        port = pport;
     }
 
-    public String getName()
-    {
-        return "s";
+    private String getUsername(){
+        return username;
     }
-    public String getIp()
-    {
-        return "2";
+
+    private String getPassword(){
+        return password;
     }
-    public int getPort()
-    {
-        return 2;
+
+    private String getIp(){
+        return ip;
     }
+
+    private int getPort(){
+        return port;
+    }
+
+    private Game getGame(){
+        return game;
+    }
+
+    private int getWins(){
+        return gameswon;
+    }
+
+    private void increaseWins(){}
+
+    private int getLosses(){
+        return gameslost;
+    }
+
+    private void increaseLosses(){}
+
+    private void setPort(int pport){
+        port = pport;
+    }
+
+    private void setIp(String pip){
+        ip = pip;
+    }
+
+    private void setGame(Game pgame){
+        game = pgame;
+    }
+
 }
-/*public record User(String ip, String port, String name) 
-{
-}*/
