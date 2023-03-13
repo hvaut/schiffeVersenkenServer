@@ -104,9 +104,9 @@ public class Board
         if(checkShot(x,y)){
             return 0;
         }
-        if(Water.equals(field[x][y].getClass()))  {
+        if(Water == field[x][y].getClass())  {
             return 1;
-        } else if(ShipField.equals(field[x][y].getClass()))  {
+        } else if(ShipField ==field[x][y].getClass())  {
             return 2;
         }
         return 0;
