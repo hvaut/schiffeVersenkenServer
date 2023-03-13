@@ -39,11 +39,11 @@ public class Game
     {
         if(player.getName().equals(player1.getName()))
         {
-            int result = board1.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
+            PlacementEvent result = board1.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
             switch(result)
             {
                 case 0:
-                    server.send(player1.getIp(), player1.getPort(), "+SHOOT: miss");
+                    server.send(player1.getIp(), player1.getPort(), );
                     return;
                 case 1:
                     server.send(player1.getIp(), player1.getPort(), "-PLACE: ship does not exist");

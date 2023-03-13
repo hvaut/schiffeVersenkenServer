@@ -8,5 +8,5 @@
 public enum PlacementEvent
 {
     //TODO
-   VAILD, ST
+   VAILD, OUT_OF_BOUNDS, INVAILD
 }

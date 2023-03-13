@@ -40,12 +40,12 @@ public class Board
      *                 and the amount of available ships for the length of pShip is greater than 0
      *                 otherwise returns false.
      */
-    private boolean checkPlacement(Ship pShip)
+    private PlacementEvent checkPlacement(Ship pShip)
     {
         //Return false in case it's outside the board
         if (pShip.x1() >= boardSize || pShip.x2() >= boardSize || pShip.y1() >= boardSize || pShip.y2() >= boardSize
         || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
-            return false;
+            return OUT_OF_BOUNDS;
 
         //Invalidate in case the ship is not horizontally/vertically placed
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
@@ -55,10 +55,9 @@ public class Board
             || pShip.length() == 3 && ships[1] > 0
             || pShip.length() == 4 && ships[2] > 0
             || pShip.length() == 5 && ships[3] > 0)
-                return true;
+                return VALID;
         } 
-
-        return false;
+        return INVAILD;
     }
 
     /**
@@ -66,7 +65,7 @@ public class Board
      * 
      * @return       
      */
-    public void placeShip(int x1,int y1,int x2,int y2)
+    public PlacementEvent placeShip(int x1,int y1,int x2,int y2)
     {
         Ship pShip = new Ship(x1,x2,y1,y2);
         if(checkPlacement(pShip)){
