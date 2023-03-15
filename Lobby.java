@@ -132,7 +132,7 @@ public class Lobby extends Server
      * Requires a lobby and two Users to start a new game
      */
     public void startGame(User p1, User p2) {
-        Game newGame = new Game(this, p1, p2);
+        Game newGame = new Game(p1, p2, this);
 
         //Adding both users to the games list
         games.append(p1);
@@ -198,12 +198,12 @@ public class Lobby extends Server
         switch (Message[0]){
             case "LOGIN":
                 login(Message[1], Message[2], pIP, pPort);
-                send("STATUS:LOBBY");
+                send(pIP, pPort, "STATUS:LOBBY");
                 break;
 
             case "LOGOUT":
                 logout(pIP, pPort);
-                send("STATUS:LOGIN");
+                send(pIP, pPort, "STATUS:LOGIN");
                 break;
 
             case "REQUESTENEMY":
