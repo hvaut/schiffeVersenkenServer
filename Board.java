@@ -124,7 +124,6 @@ public class Board
         }
         return ShotEvent.FAILED;
     }
-    //TODO Enumeration for error handeling
     public boolean checkEnd() {
         return false;
     }

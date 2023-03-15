@@ -143,7 +143,7 @@ public class Game
             server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
         }
     }
-    // else
+    // } else
     // {
     // if(!player1Turn)//checks if it's the players turn
     // {
