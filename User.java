@@ -26,60 +26,60 @@ public class User
         port = _port;
     }
 
-    private String getUsername()
+    public String getUsername()
     {
         return username;
     }
 
-    private String getPassword()
+    public String getPassword()
     {
         return password;
     }
 
-    private String getIp()
+    public String getIp()
     {
         return ip;
     }
 
-    private int getPort()
+    public int getPort()
     {
         return port;
     }
 
-    private Game getGame()
+    public Game getGame()
     {
         return game;
     }
 
-    private int getWins()
+    public int getWins()
     {
         return gamesWon;
     }
 
-    private void increaseWins()
+    public void increaseWins()
     {
         gamesWon++;
     }
 
-    private int getLosses()
+    public int getLosses()
     {
         return gamesLost;
     }
 
-    private void increaseLosses()
+    public void increaseLosses()
     {
         gamesLost++;
     }
 
-    private void setPort(int _port){
+    public void setPort(int _port){
         port = _port;
     }
 
-    private void setIp(String _ip){
+    public void setIp(String _ip){
         ip = _ip;
     }
 
-    private void setGame(Game _game){
+    public void setGame(Game _game){
         game = _game;
     }
 

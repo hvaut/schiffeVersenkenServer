@@ -1,4 +1,4 @@
-    /**
+ /**
  * Beschreiben Sie hier die Klasse Game.
  * 
  * @author Leon Stobbe/Georg Seiler 
@@ -37,24 +37,24 @@ public class Game
      */
     public void place(int x1, int y1, int x2, int y2, User player)
     {
-        if(player.getName().equals(player1.getName()))
+        if(player.getUsername().equals(player1.getUsername()))
         {
             PlacementEvent result = board1.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
             switch(result)
             {
-                case 0:
-                    server.send(player1.getIp(), player1.getPort(), );
+                case PlacementEvent.VALID:
+                    server.send(player1.getIp(), player1.getPort(), "-PLACE: ");
                     return;
-                case 1:
+                case PlacementEvent.NOSHIP:
                     server.send(player1.getIp(), player1.getPort(), "-PLACE: ship does not exist");
                     return;
-                case 2:
+                case PlacementEvent.ALREADY_PLACED:
                     server.send(player1.getIp(), player1.getPort(), "-PLACE: ship is already placed");
                     return;
-                case 3:
+                case PlacementEvent.OUT_OF_BOUNDS:
                     server.send(player1.getIp(), player1.getPort(), "-PLACE: ship is out of bounds");
                     return;
-                case 4:
+                case PlacementEvent.INVALID:
                     server.send(player1.getIp(), player1.getPort(), "-PLACE: placement is invalid");
                     return;
                 default:
@@ -96,7 +96,7 @@ public class Game
      */
     public void shoot(int x, int y, User player)
     {
-        if(player.getName().equals(player1.getName()))
+        if(player.getUsername().equals(player1.getUsername()))
         {
             if(player1Turn)//checks if it's the players turn
             {
@@ -182,7 +182,7 @@ public class Game
      */
     public void sendNextMove(User player)
     {
-        server.send(player.getIp(), player.getPort(), "ACTIVEUSER:" + player.getName());
+        server.send(player.getIp(), player.getPort(), "ACTIVEUSER:" + player.getUsername());
     }
 
     /**
