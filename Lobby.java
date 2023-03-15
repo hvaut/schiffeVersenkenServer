@@ -122,7 +122,7 @@ public class Lobby extends Server
             send(p2.getIP(), p2.getPort(), "GETREQUEST:" + p1);
         }
         else{
-            send(p1.getIP(), p1.getPort(), "-GETREQUEST: user not available");
+            send(p1.getIP(), p1.getPort(), "-GETREQUEST:user not available");
         }
     }
 
@@ -131,14 +131,14 @@ public class Lobby extends Server
      * To avoid getting invalid requests we remove both users from the playerLobby list
      * Requires a lobby and two Users to start a new game
      */
-    public void startGame(Lobby CurrentLobby, User p1, User p2) {
+    public void startGame(User p1, User p2) {
         Game newGame = new Game(this, p1, p2);
 
         //Adding both users to the games list
         games.append(p1);
         games.append(p2);
 
-        //removing both users from the playerLobby list
+        //Removing both users from the playerLobby list
         playerLobby.toFirst();
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == p1){
@@ -184,6 +184,13 @@ public class Lobby extends Server
         }
     }
 
+    /**
+     * Method processMessage
+     *
+     * @param pIP Ein Parameter
+     * @param pPort Ein Parameter
+     * @param pMessage Ein Parameter
+     */
     public void processMessage(String pIP, int pPort, String pMessage){
         String[] Message = pMessage.split(":");
         User tmp = getPlayer(pIP,pPort);
@@ -204,10 +211,14 @@ public class Lobby extends Server
                 break;
 
             case "+GETREQUEST":
-                startGame(tmp, Message[1]);
-                send(pIP, pPort, "STATUS:GAME");
-                send(Message[1].getIP, Message[1].getPort, "STATUS:GAME");
-                break;
+                if(Message[1] == true){
+                    startGame(tmp, Message[2]); //tmp is the first user and Message[2] is the second user
+                    send(pIP, pPort, "STATUS:GAME");
+                    send(Message[2].getIP, Message[2].getPort, "STATUS:GAME");
+                }
+                else{
+                    send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
+                }
 
         }
     }
