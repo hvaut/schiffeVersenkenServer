@@ -102,18 +102,22 @@ public class Game
                     //sendNextMove(player);
                     return;
                 }
-                int result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
+                ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
                 switch (result){
-                    case 0:
+                    case MISS:
                         server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
-                        return;
-                    case 1:
+                        break;
+                    case HIT:
                         server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
-                        return;
-                    case 2:
+                        break;
+                    case SUNK:
                         server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
-                        return;
+                        break;
+                    case FAILED:
+                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-SHOOT");
+                        break;
                     default:
+                        break;
                 }
                 //Update the current Player 
                 //Kannst du den Zeichencodes am Ende erklären

@@ -6,5 +6,5 @@
  */
 public enum ShotEvent
 {
-    FAILED, WATER, HIT, SUNK
+    FAILED, MISS, HIT, SUNK
 }
