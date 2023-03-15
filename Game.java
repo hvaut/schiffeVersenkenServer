@@ -93,28 +93,34 @@ public class Game
         {
             if(player1Turn)//checks if it's the players turn
             {
-                if(!board1.checkShot(x, y))//checks if the shot is invalid
+                if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
                 {
                     server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
                     //sendNextMove(player);
                     return;
                 }
-                int result = board1.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
+                int result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
                 switch (result){
                     case 0:
-                        server.send(player1.getIP(), player1.getPort(), "+SHOOT: miss");
+                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
                         return;
                     case 1:
-                        server.send(player1.getIP(), player1.getPort(), "+SHOOT: hit");
+                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
                         return;
                     case 2:
-                        server.send(player1.getIP(), player1.getPort(), "+SHOOT: ship down");
+                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
                         return;
                     default:
                 }
-                server.send(player1.getIP(), player1.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+                //TODO Not the curent Player
                 server.send(player2.getIP(), player2.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+                if(player1==currentPlayer){
                 player1Turn = false;//changes the active player
+            } else {
+                player1Turn = true;
+            }
+            }
                 if(checkEnd())
                 {
                     endGame();

@@ -131,8 +131,8 @@ public class Lobby extends Server
      * To avoid getting invalid requests we remove both users from the playerLobby list
      * Requires a lobby and two Users to start a new game
      */
-    public void startGame(Lobby this, User p1, User p2){
-        Game newGame = new Game(p1, p2, this);
+    public void startGame(Lobby CurrentLobby, User p1, User p2) {
+        Game newGame = new Game(this, p1, p2);
 
         //Adding both users to the games list
         games.append(p1);
@@ -184,18 +184,18 @@ public class Lobby extends Server
         }
     }
 
-    public void processMessage(String pClientIP, int pClientPort, String pMessage){
+    public void processMessage(String pIP, int pPort, String pMessage){
         String[] Message = pMessage.split(":");
         User tmp = getPlayer(pIP,pPort);
 
         switch (Message[0]){
             case "LOGIN":
-                login(Message[1], Message[2], pClientIP, pClientPort);
+                login(Message[1], Message[2], pIP, pPort);
                 send("STATUS:LOBBY");
                 break;
 
             case "LOGOUT":
-                logout(pClientIP, pClientPort);
+                logout(pIP, pPort);
                 send("STATUS:LOGIN");
                 break;
 
@@ -205,7 +205,7 @@ public class Lobby extends Server
 
             case "+GETREQUEST":
                 startGame(tmp, Message[1]);
-                send(pClientIP, pClientPort, "STATUS:GAME");
+                send(pIP, pPort, "STATUS:GAME");
                 send(Message[1].getIP, Message[1].getPort, "STATUS:GAME");
                 break;
 
