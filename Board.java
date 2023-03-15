@@ -115,7 +115,7 @@ public class Board
         }
         field[x][y].hit();
         if(field[x][y]instanceof Water)  {
-            return ShotEvent.WATER;
+            return ShotEvent.MISS;
         } else if(field[x][y]instanceof ShipField)  {
             if(((ShipField) field[x][y]).getShip().length()<=0){
                 return ShotEvent.SUNK;           
