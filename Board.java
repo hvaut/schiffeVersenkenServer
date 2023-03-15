@@ -116,8 +116,13 @@ public class Board
         field[x][y].hit();
         if(field[x][y]instanceof Water)  {
             return ShotEvent.MISS;
-        } else if(field[x][y]instanceof ShipField)  {
-            if(((ShipField) field[x][y]).getShip().length()<=0){
+        } else if(field[x][y]instanceof ShipField)
+        {
+            Ship ship = ((ShipField)field[x][y]).getShip();
+            if(ship.length() <=0)
+            {
+                if (ships[ship.getOriginalLength()] > 0)
+                    ships[ship.getOriginalLength()-2]--;
                 
                 return ShotEvent.SUNK;           
             }
@@ -126,7 +131,9 @@ public class Board
         return ShotEvent.FAILED;
     }
     public boolean checkEnd() {
-        //TODO
+        if (ships[0] == 0 && ships[1] == 0 && ships[2] == 0 && ships[3] == 0)
+            return true;
+            
         return false;
     }
 }
