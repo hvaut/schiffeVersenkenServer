@@ -220,9 +220,11 @@ public class Lobby extends Server
 
                     send(pIP, pPort, "STATUS:GAME");
                     send(player2.getIP(), player2.getPort(), "STATUS:GAME");
+                    break;
                 }
                 else{
                     send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
+                    break;
                 }
         }
     }
