@@ -188,9 +188,9 @@ public class Lobby extends Server
     /**
      * Method processMessage
      *
-     * @param pIP Ein Parameter
-     * @param pPort Ein Parameter
-     * @param pMessage Ein Parameter
+     * @param pIP is the users ip that send the message
+     * @param pPort is the users port that send the message
+     * @param pMessage is the message (duh)
      * @param tmp is sending the message
      */
     public void processMessage(String pIP, int pPort, String pMessage){
