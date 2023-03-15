@@ -118,14 +118,15 @@ public class Board
             return ShotEvent.MISS;
         } else if(field[x][y]instanceof ShipField)  {
             if(((ShipField) field[x][y]).getShip().length()<=0){
+                
                 return ShotEvent.SUNK;           
             }
             return ShotEvent.HIT;
         }
         return ShotEvent.FAILED;
     }
-    //TODO Enumeration for error handeling
     public boolean checkEnd() {
+        //TODO
         return false;
     }
 }

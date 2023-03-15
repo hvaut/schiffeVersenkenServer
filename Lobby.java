@@ -214,20 +214,19 @@ public class Lobby extends Server
                 break;
 
             case "+GETREQUEST":
-                if(Message[1] == "true"){
+                if("true".equals(Message[1])){
                     User player2 = getPlayer(Message[2]);
                     startGame(tmp, player2);
+
                     send(pIP, pPort, "STATUS:GAME");
                     send(player2.getIP(), player2.getPort(), "STATUS:GAME");
                 }
                 else{
                     send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
                 }
-
         }
     }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
-
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }
