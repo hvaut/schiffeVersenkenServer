@@ -1,4 +1,3 @@
-
 /**
  * Every possible Error when placing a ship
  * 
@@ -8,5 +7,5 @@
 public enum PlacementEvent
 {
     //TODO
-   VAILD, OUT_OF_BOUNDS, INVAILD
+   VALID, OUT_OF_BOUNDS, INVALID, NOSHIP, ALREADY_PLACED
 }

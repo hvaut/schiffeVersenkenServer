@@ -36,7 +36,7 @@ public class Lobby extends Server
         //Verifying username
         userlist.toFirst();
         while (userlist.hasAccess()){
-            if (userlist.getContent().getName() == tmp.getName())
+            if (userlist.getContent().getUsername() == tmp.getUsername())
             {
                 name = true;
                 break;

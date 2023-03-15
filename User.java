@@ -36,7 +36,7 @@ public class User
         return password;
     }
 
-    public String getIp()
+    public String getIP()
     {
         return ip;
     }
