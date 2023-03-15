@@ -1,6 +1,4 @@
 /**
- * Beschreiben Sie hier die Klasse Lobby.
- * 
  * @author Nikita Funk und John Braun
  * @version 13.03.2023
  */
@@ -33,24 +31,28 @@ public class Lobby extends Server
      */
     public void login (String pUsername, String pPassword, String pIP, int pPort){
         User tmp = new User(pUsername, pPassword, pIP, pPort);
-        userlist.toFirst();
         boolean name, password = false;
 
         //Verifying username
+        userlist.toFirst();
         while (userlist.hasAccess()){
             if (userlist.getContent().getName() == tmp.getName())
             {
                 name = true;
+                break;
             }
             else{userlist.next();}
         }
-        //Verifying password 
+        //Verifying password
+        userlist.toFirst();
         while (userlist.hasAccess()){
             if (userlist.getContent().getPassword() == tmp.getPassword()){
                 password = true;
+                break;
             }
+            else{userlist.next();}
         }
-
+        //Checking if the user is new, the password is wrong or if the username is not available
         if (name == true && password == true){
             playerLobby.append(tmp);
         }
@@ -60,7 +62,7 @@ public class Lobby extends Server
             playerLobby.append(tmp);
         }
         else if (name == true && password == false){
-            return;
+            send(pIP, pPort, "-LOGIN: Username is not available or your password is wrong");
         }
     }
 
@@ -88,8 +90,8 @@ public class Lobby extends Server
      * Requires the users IP and port to identify the correct User
      */
     public User getPlayer(String pIP, int pPort){
-        userlist.toFirst();
         User player = userlist.getContent();
+        userlist.toFirst();
         while (userlist.hasAccess()){
             if (userlist.getContent().getIP() == pIP){
                 player = userlist.getContent();
@@ -98,6 +100,30 @@ public class Lobby extends Server
             else{userlist.next();}
         }
         return player;
+    }
+
+    /**
+     * Method request sends a request to a User for a new game
+     *
+     * @param p1 is the User that sends the request
+     * @param p2 is the User that receives the request
+     */
+    public void request(User p1, User p2){
+        boolean playerIsAvailable = false;
+        playerLobby.toFirst();
+        while(playerLobby.hasAccess()){
+            if (playerLobby.getContent() == p2){
+                playerIsAvailable = true;
+                break;
+            }
+            else{playerLobby.next();}
+        }
+        if (playerIsAvailable == true){
+            send(p2.getIP(), p2.getPort(), "GETREQUEST:" + p1);
+        }
+        else{
+            send(p1.getIP(), p1.getPort(), "-GETREQUEST: user not available");
+        }
     }
 
     /**
@@ -117,12 +143,15 @@ public class Lobby extends Server
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == p1){
                 playerLobby.remove();
+                break;
             }
             else{playerLobby.next();}
         }
+        playerLobby.toFirst();
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == p2){
                 playerLobby.remove();
+                break;
             }
             else{playerLobby.next();}
         }
@@ -146,6 +175,7 @@ public class Lobby extends Server
             }
             else{games.next();}
         }
+        games.toFirst();
         while (games.hasAccess()){
             if (games.getContent() == p2){
                 games.remove();
@@ -155,7 +185,31 @@ public class Lobby extends Server
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage){
-        
+        String[] Message = pMessage.split(":");
+        User tmp = getPlayer(pIP,pPort);
+
+        switch (Message[0]){
+            case "LOGIN":
+                login(Message[1], Message[2], pClientIP, pClientPort);
+                send("STATUS:LOBBY");
+                break;
+
+            case "LOGOUT":
+                logout(pClientIP, pClientPort);
+                send("STATUS:LOGIN");
+                break;
+
+            case "REQUESTENEMY":
+                request(tmp, Message[1]);
+                break;
+
+            case "+GETREQUEST":
+                startGame(tmp, Message[1]);
+                send(pClientIP, pClientPort, "STATUS:GAME");
+                send(Message[1].getIP, Message[1].getPort, "STATUS:GAME");
+                break;
+
+        }
     }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
