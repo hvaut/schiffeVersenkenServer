@@ -6,11 +6,7 @@
  */
 public class Game
 {
-    private class Lobby{
-        public void send(String s, int i, String message)
-        {
-        }
-    }
+
     private Board board1;
     private Board board2;
     private User player1;
