@@ -31,7 +31,8 @@ public class Lobby extends Server
      */
     public void login (String pUsername, String pPassword, String pIP, int pPort){
         User tmp = new User(pUsername, pPassword, pIP, pPort);
-        boolean name, password = false;
+        boolean name = false;
+        boolean password = false;
 
         //Verifying username
         userlist.toFirst();
@@ -74,7 +75,7 @@ public class Lobby extends Server
     public void logout (String pIP, int pPort)
     {
         closeConnection(pIP,pPort);
-        User disconnect = getPlayer(pIP,pPort);
+        User disconnect = getPlayer(pIP);
         playerLobby.toFirst();
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == disconnect){
@@ -89,7 +90,7 @@ public class Lobby extends Server
      * Method getPlayer returns a User
      * Requires the users IP and port to identify the correct User
      */
-    public User getPlayer(String pIP, int pPort){
+    public User getPlayer(String pIP){
         User player = userlist.getContent();
         userlist.toFirst();
         while (userlist.hasAccess()){
@@ -190,10 +191,11 @@ public class Lobby extends Server
      * @param pIP Ein Parameter
      * @param pPort Ein Parameter
      * @param pMessage Ein Parameter
+     * @param tmp is sending the message
      */
     public void processMessage(String pIP, int pPort, String pMessage){
         String[] Message = pMessage.split(":");
-        User tmp = getPlayer(pIP,pPort);
+        User tmp = getPlayer(pIP);
 
         switch (Message[0]){
             case "LOGIN":
@@ -207,14 +209,16 @@ public class Lobby extends Server
                 break;
 
             case "REQUESTENEMY":
-                request(tmp, Message[1]);
+                User enemy = getPlayer(Message[1]);
+                request(tmp, enemy);
                 break;
 
             case "+GETREQUEST":
-                if(Message[1] == true){
-                    startGame(tmp, Message[2]); //tmp is the first user and Message[2] is the second user
+                if(Message[1] == "true"){
+                    User player2 = getPlayer(Message[2]);
+                    startGame(tmp, player2);
                     send(pIP, pPort, "STATUS:GAME");
-                    send(Message[2].getIP, Message[2].getPort, "STATUS:GAME");
+                    send(player2.getIP(), player2.getPort(), "STATUS:GAME");
                 }
                 else{
                     send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
