@@ -132,7 +132,7 @@ public class Lobby extends Server
      * Requires a lobby and two Users to start a new game
      */
     public void startGame(User p1, User p2) {
-        Game newGame = new Game(this, p1, p2);
+        Game newGame = new Game(p1, p2, this);
 
         //Adding both users to the games list
         games.append(p1);
