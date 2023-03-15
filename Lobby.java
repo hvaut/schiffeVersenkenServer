@@ -198,12 +198,12 @@ public class Lobby extends Server
         switch (Message[0]){
             case "LOGIN":
                 login(Message[1], Message[2], pIP, pPort);
-                send("STATUS:LOBBY");
+                send(pIP, pPort, "STATUS:LOBBY");
                 break;
 
             case "LOGOUT":
                 logout(pIP, pPort);
-                send("STATUS:LOGIN");
+                send(pIP, pPort, "STATUS:LOGIN");
                 break;
 
             case "REQUESTENEMY":
