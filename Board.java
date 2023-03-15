@@ -130,10 +130,10 @@ public class Board
         }
         return ShotEvent.FAILED;
     }
-
     public boolean checkEnd() {
         if (ships[0] == 0 && ships[1] == 0 && ships[2] == 0 && ships[3] == 0)
             return true;
+            
         return false;
     }
 }

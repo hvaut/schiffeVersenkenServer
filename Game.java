@@ -88,58 +88,56 @@ public class Game
             otherPlayer = player1;
             currentBoard = board2;
         }
-        if(player.getUsername().equals(player1.getUsername()))
+        if(player1Turn)//checks if it's the players turn
         {
-            if(player1Turn)//checks if it's the players turn
+            if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
             {
-                if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
-                {
-                    server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
-                    //sendNextMove(player);
-                    return;
-                }
-                ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
-                switch (result){
-                    case MISS:
-                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
-                        break;
-                    case HIT:
-                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
-                        break;
-                    case SUNK:
-                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
-                        break;
-                    case FAILED:
-                        server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-SHOOT");
-                        break;
-                    default:
-                        break;
-                }
-                //Update the current Player 
-                //Kannst du den Zeichencodes am Ende erklären
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
-                //Update the other Player
-                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
-                //changes the active player
-                if(player1==currentPlayer){
-                    player1Turn = false;
-                } else {
-                    player1Turn = true;
-                }
-            }
-            if(checkEnd())
-            {
-                endGame();
+                server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+                //sendNextMove(player);
                 return;
             }
-            sendNextMove(otherPlayer);//sends the other player a notification
+            ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
+            switch (result){
+                case MISS:
+                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
+                    break;
+                case HIT:
+                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
+                    break;
+                case SUNK:
+                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
+                    break;
+                case FAILED:
+                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-SHOOT");
+                    break;
+                default:
+                    break;
+            }
+            //Update the current Player 
+            //Kannst du den Zeichencodes am Ende erklären
+            server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
+            //Update the other Player
+            server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+            //changes the active player
+            if(player1==currentPlayer){
+                player1Turn = false;
+            } else {
+                player1Turn = true;
+            }
         }
-        else
+        if(checkEnd())
         {
-            server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
+            endGame();
+            return;
         }
+        sendNextMove(otherPlayer);//sends the other player a notification
+
+        // else
+        // {
+        // server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
+        // }
     }
-    // else
+    // } else
     // {
     // if(!player1Turn)//checks if it's the players turn
     // {

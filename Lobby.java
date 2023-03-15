@@ -211,7 +211,7 @@ public class Lobby extends Server
                 break;
 
             case "+GETREQUEST":
-                if(Message[1] == true){
+                if("true".equals(Message[1])){
                     startGame(tmp, Message[2]); //tmp is the first user and Message[2] is the second user
                     send(pIP, pPort, "STATUS:GAME");
                     send(Message[2].getIP, Message[2].getPort, "STATUS:GAME");
