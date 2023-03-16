@@ -14,6 +14,7 @@ public class User
     Game game;
     int gamesLost = 0;
     int gamesWon = 0;
+    int score = gamesWon/gamesLost;
 
     /**
      * Konstruktor für Objekte der Klasse User
@@ -69,6 +70,11 @@ public class User
     public void increaseLosses()
     {
         gamesLost++;
+    }
+
+    public int getScore()
+    {
+        return score;
     }
 
     public void setPort(int _port){
