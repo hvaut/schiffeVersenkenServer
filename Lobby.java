@@ -88,13 +88,30 @@ public class Lobby extends Server
 
     /**
      * Method getPlayer returns a User
-     * Requires the users IP and port to identify the correct User
+     * Requires the users IP to identify the correct User
      */
     public User getPlayer(String pIP){
         User player = userlist.getContent();
         userlist.toFirst();
         while (userlist.hasAccess()){
             if (userlist.getContent().getIP() == pIP){
+                player = userlist.getContent();
+                break;
+            }
+            else{userlist.next();}
+        }
+        return player;
+    }
+    
+    /**
+     * Method getPlayerbyName returns a User
+     * Requires the username to identify the correct User
+     */
+    public User getPlayerByName(String pName){
+        User player = userlist.getContent();
+        userlist.toFirst();
+        while (userlist.hasAccess()){
+            if (userlist.getContent().getUsername() == pName){
                 player = userlist.getContent();
                 break;
             }
@@ -209,13 +226,13 @@ public class Lobby extends Server
                 break;
 
             case "REQUESTENEMY":
-                User enemy = getPlayer(Message[1]);
+                User enemy = getPlayerByName(Message[1]);
                 request(tmp, enemy);
                 break;
 
             case "+GETREQUEST":
                 if("true".equals(Message[1])){
-                    User player2 = getPlayer(Message[2]);
+                    User player2 = getPlayerByName(Message[2]);
                     startGame(tmp, player2);
 
                     send(pIP, pPort, "STATUS:GAME");
