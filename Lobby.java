@@ -65,6 +65,7 @@ public class Lobby extends Server
         else if (name == true && password == false){
             send(pIP, pPort, "-LOGIN: Username is not available or your password is wrong");
         }
+        userlist.toFirst();
     }
 
     /**
@@ -84,6 +85,7 @@ public class Lobby extends Server
             }
             else{playerLobby.next();}
         }
+        playerLobby.toFirst();
     }
 
     /**
@@ -100,6 +102,7 @@ public class Lobby extends Server
             }
             else{userlist.next();}
         }
+        userlist.toFirst();
         return player;
     }
 
@@ -117,6 +120,7 @@ public class Lobby extends Server
             }
             else{userlist.next();}
         }
+        userlist.toFirst();
         return player;
     }
 
@@ -142,6 +146,7 @@ public class Lobby extends Server
         else{
             send(p1.getIP(), p1.getPort(), "-GETREQUEST:user not available");
         }
+        playerLobby.toFirst();
     }
 
     /**
@@ -181,6 +186,7 @@ public class Lobby extends Server
 
             else{playerLobby.next();}
         }
+        playerLobby.toFirst();
     }
 
     /**
@@ -217,6 +223,7 @@ public class Lobby extends Server
 
             else{games.next();}
         }
+        games.toFirst();
     }
 
     /**
@@ -273,6 +280,21 @@ public class Lobby extends Server
                 
                 response = response.substring(0, response.length() - 1);
                 send(pIP, pPort, response);
+                break;
+                
+            case "GETENEMIES":
+                String enemies = "+GETENEMIES:";
+                userlist.toFirst();
+                while (!userlist.isEmpty()) 
+                {
+                    User usr = userlist.getContent();
+                    enemies += usr.getUsername() + ",";
+                    userlist.next();
+                }
+                userlist.toFirst();
+                
+                enemies = enemies.substring(0, enemies.length() - 1);
+                send(pIP, pPort, enemies);
                 break;
         }
     }
