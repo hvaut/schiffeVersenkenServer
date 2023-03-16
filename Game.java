@@ -13,7 +13,7 @@ public class Game
     private User player2;
     private Lobby server;
     private int state = 0;//0 = place; 1 = game; 2 = end
-    private User currentPlayer;;//if true, it's player1's turn (used in the shoot method)
+    private User currentPlayer;//saves the current Player (used in the shoot method)
     private User otherPlayer;
     private Board currentBoard;
     public Game(User _player1, User _player2, Lobby _server)
@@ -48,23 +48,29 @@ public class Game
             tempPlayer = player2;
             tempBoard = board2;
         }
-        PlacementEvent result = tempBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
+        PlacementEvent result = tempBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement
         switch(result)
         {
             case VALID:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ");
+                int[] ships = tempBoard.getShips();
+                String shipString = "";
+                for(int i = 0; i < ships.length; i++)
+                {
+                    shipString += ":" + ships[i];
+                }
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "+PLACE" + shipString);
                 return;
             case NOSHIP:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship does not exist");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship does not exist");
                 return;
             case ALREADY_PLACED:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship is already placed");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship is already placed");
                 return;
             case OUT_OF_BOUNDS:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship is out of bounds");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship is out of bounds");
                 return;
             case INVALID:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: placement is invalid");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: placement is invalid");
                 return;
             default:
 
