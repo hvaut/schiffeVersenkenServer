@@ -12,6 +12,7 @@ public class Ship
     private int y1;
     private int y2;
     private int length;
+    private int originalLength;
     /**
      * Construktor for objectes of the class Ship
      */
@@ -22,10 +23,20 @@ public class Ship
         this.y1 = y1;
         this.y2 = y2;
         this.length = shipLength();
+        this.originalLength = length;
     }
 
     public int length() {
         return length;
+    }
+    
+    public int getOriginalLength() {
+        return originalLength;
+    }
+    
+    public void reduceLength()
+    {
+        length--;
     }
 
     public int x1() {

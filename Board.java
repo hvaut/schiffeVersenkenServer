@@ -46,7 +46,7 @@ public class Board
         if (pShip.x1() >= boardSize || pShip.x2() >= boardSize || pShip.y1() >= boardSize || pShip.y2() >= boardSize
         || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
             return PlacementEvent.OUT_OF_BOUNDS;
-
+            
         //Invalidate in case the ship is not horizontally/vertically placed
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
@@ -113,18 +113,28 @@ public class Board
         field[x][y].hit();
         if(field[x][y]instanceof Water)  {
             return ShotEvent.MISS;
-        } else if(field[x][y]instanceof ShipField)  {
-
-            if(((ShipField) field[x][y]).getShip().length()<=0){
-
+        } else if(field[x][y]instanceof ShipField)
+        {
+            Ship ship = ((ShipField)field[x][y]).getShip();
+            if(ship.length() <=0)
+            {
+                //Reduces the amount of available ships
+                if (ships[ship.getOriginalLength()] > 0)
+                    //The first index stores a ship with the length of 2, 
+                    //so if the ship length equals 2, it will access index 0
+                    ships[ship.getOriginalLength()-2]--;
                 return ShotEvent.SUNK;           
             }
+            //Reduce the ships length because it directly corrolates to the amount of available fields
+            ship.reduceLength();
             return ShotEvent.HIT;
         }
         return ShotEvent.FAILED;
     }
 
     public boolean checkEnd() {
-
+        if (ships[0] == 0 && ships[1] == 0 && ships[2] == 0 && ships[3] == 0)
+            return true; 
+        return false;
     }
 }

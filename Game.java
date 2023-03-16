@@ -13,13 +13,18 @@ public class Game
     private User player2;
     private Lobby server;
     private int state = 0;//0 = place; 1 = game; 2 = end
-    private boolean player1Turn = true;//if true, it's player1's turn (used in the shoot method)
+    private User currentPlayer;//saves the current Player (used in the shoot method)
+    private User otherPlayer;
+    private Board currentBoard;
     public Game(User _player1, User _player2, Lobby _server)
     {
         player1 = _player1;
-        player2 = player2;
+        player2 = _player2;
+        currentPlayer = player1;
+        otherPlayer = player2;
         board1 = new Board(player1, this);
         board2 = new Board(player2, this);
+        currentBoard = board1;
         server = _server;
     }
 
@@ -33,36 +38,42 @@ public class Game
      */
     public void place(int x1, int y1, int x2, int y2, User player)
     {
-        User currentPlayer;
-        Board currentBoard;
+        User tempPlayer;
+        Board tempBoard;
         if(player.getUsername().equals(player1.getUsername()))
         {
-            currentPlayer = player1;
-            currentBoard = board1;
+            tempPlayer = player1;
+            tempBoard = board1;
         } else {
-            currentPlayer = player2;
-            currentBoard = board2;
+            tempPlayer = player2;
+            tempBoard = board2;
         }
-        PlacementEvent result = currentBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement: 0 = successful, 1 = ship does not exist, 2 = ship is already placed, 3 = ship is out of bounds, 4 = placement is invalid
+        PlacementEvent result = tempBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement
         switch(result)
         {
             case VALID:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ");
+                int[] ships = tempBoard.getShips();
+                String shipString = "";
+                for(int i = 0; i < ships.length; i++)
+                {
+                    shipString += ":" + ships[i];
+                }
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "+PLACE" + shipString);
                 return;
             case NOSHIP:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship does not exist");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship does not exist");
                 return;
             case ALREADY_PLACED:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship is already placed");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship is already placed");
                 return;
             case OUT_OF_BOUNDS:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: ship is out of bounds");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship is out of bounds");
                 return;
             case INVALID:
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-PLACE: placement is invalid");
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: placement is invalid");
                 return;
             default:
-
+                return;
         }
     }
 
@@ -75,29 +86,31 @@ public class Game
      */
     public void shoot(int x, int y, User player)
     {
-        User currentPlayer;
-        User otherPlayer;
-        Board currentBoard;
-        if(player.getUsername().equals(player1.getUsername()))
+        //User otherPlayer;
+        //Board currentBoard;
+        /*if(player.getUsername().equals(player1.getUsername()))
         {
-            currentPlayer = player1;
-            otherPlayer = player2;
-            currentBoard = board1;
+        currentPlayer = player1;
+        otherPlayer = player2;
+        currentBoard = board1;
         } else {
-            currentPlayer = player2;
-            otherPlayer = player1;
-            currentBoard = board2;
-        }
-        if(player1Turn)//checks if it's the players turn
+        currentPlayer = player2;
+        otherPlayer = player1;
+        currentBoard = board2;
+        }*/
+        if(player.getUsername().equals(currentPlayer.getUsername()))
         {
-            if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
-            {
-                server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
-                //sendNextMove(player);
-                return;
-            }
+                // if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
+                // {
+                    // server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+                    // //sendNextMove(player);
+                    // return;
+                // }
             ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
             switch (result){
+                case FAILED:
+                    server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+                    break;
                 case MISS:
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
                     break;
@@ -107,9 +120,6 @@ public class Game
                 case SUNK:
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
                     break;
-                case FAILED:
-                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-SHOOT");
-                    break;
                 default:
                     break;
             }
@@ -118,25 +128,32 @@ public class Game
             server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);
             //Update the other Player
             server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);
+
             //changes the active player
             if(player1==currentPlayer){
-                player1Turn = false;
+                currentPlayer = player2;
+                otherPlayer = player1;
+                currentBoard = board2;
             } else {
-                player1Turn = true;
+                currentPlayer = player1;
+                otherPlayer = player2;
+                currentBoard = board1;
             }
-        }
-        if(checkEnd())
-        {
-            endGame();
-            return;
-        }
-        sendNextMove(otherPlayer);//sends the other player a notification
 
-        // else
-        // {
-        // server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
-        // }
+            if(
+            checkEnd())
+            {
+                endGame();
+                return;
+            }
+            sendNextMove(currentPlayer);//sends the other player a notification
+        }
+        else
+        {
+            server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
+        }
     }
+
     // } else
     // {
     // if(!player1Turn)//checks if it's the players turn

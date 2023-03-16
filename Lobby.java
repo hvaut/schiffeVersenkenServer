@@ -31,7 +31,8 @@ public class Lobby extends Server
      */
     public void login (String pUsername, String pPassword, String pIP, int pPort){
         User tmp = new User(pUsername, pPassword, pIP, pPort);
-        boolean name, password = false;
+        boolean name = false;
+        boolean password = false;
 
         //Verifying username
         userlist.toFirst();
@@ -74,7 +75,7 @@ public class Lobby extends Server
     public void logout (String pIP, int pPort)
     {
         closeConnection(pIP,pPort);
-        User disconnect = getPlayer(pIP,pPort);
+        User disconnect = getPlayer(pIP);
         playerLobby.toFirst();
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == disconnect){
@@ -87,13 +88,30 @@ public class Lobby extends Server
 
     /**
      * Method getPlayer returns a User
-     * Requires the users IP and port to identify the correct User
+     * Requires the users IP to identify the correct User
      */
-    public User getPlayer(String pIP, int pPort){
+    public User getPlayer(String pIP){
         User player = userlist.getContent();
         userlist.toFirst();
         while (userlist.hasAccess()){
             if (userlist.getContent().getIP() == pIP){
+                player = userlist.getContent();
+                break;
+            }
+            else{userlist.next();}
+        }
+        return player;
+    }
+    
+    /**
+     * Method getPlayerbyName returns a User
+     * Requires the username to identify the correct User
+     */
+    public User getPlayerByName(String pName){
+        User player = userlist.getContent();
+        userlist.toFirst();
+        while (userlist.hasAccess()){
+            if (userlist.getContent().getUsername() == pName){
                 player = userlist.getContent();
                 break;
             }
@@ -187,13 +205,14 @@ public class Lobby extends Server
     /**
      * Method processMessage
      *
-     * @param pIP Ein Parameter
-     * @param pPort Ein Parameter
-     * @param pMessage Ein Parameter
+     * @param pIP is the users ip that send the message
+     * @param pPort is the users port that send the message
+     * @param pMessage is the message (duh)
+     * @param tmp is sending the message
      */
     public void processMessage(String pIP, int pPort, String pMessage){
         String[] Message = pMessage.split(":");
-        User tmp = getPlayer(pIP,pPort);
+        User tmp = getPlayer(pIP);
 
         switch (Message[0]){
             case "LOGIN":
@@ -207,23 +226,26 @@ public class Lobby extends Server
                 break;
 
             case "REQUESTENEMY":
-                request(tmp, Message[1]);
+                User enemy = getPlayerByName(Message[1]);
+                request(tmp, enemy);
                 break;
 
             case "+GETREQUEST":
                 if("true".equals(Message[1])){
-                    startGame(tmp, Message[2]); //tmp is the first user and Message[2] is the second user
+                    User player2 = getPlayerByName(Message[2]);
+                    startGame(tmp, player2);
+
                     send(pIP, pPort, "STATUS:GAME");
-                    send(Message[2].getIP, Message[2].getPort, "STATUS:GAME");
+                    send(player2.getIP(), player2.getPort(), "STATUS:GAME");
+                    break;
                 }
                 else{
                     send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
+                    break;
                 }
-
         }
     }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
-
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }
