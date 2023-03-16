@@ -59,16 +59,16 @@ public class Board
         } 
         return PlacementEvent.INVALID;
     }
-    
+
     public int[] getShips() 
     {
         return ships;
     }
 
     /**
-     * TODO
+     * Uses the coordinates to create a valid ship
      * 
-     * @return       
+     * @return   Return the Enumeration PlacementEvent for error handeling   
      */
     public PlacementEvent placeShip(int x1,int y1,int x2,int y2)
     {
@@ -92,17 +92,14 @@ public class Board
      * @return        Valid
      */
     public boolean checkShot(int x, int y){
-        if(x>=boardSize || y>=boardSize) {
+        if(x>=boardSize || y>=boardSize||field[x][y].isHit()) {
             return false;
-        }
-        if(field[x][y].isHit()) {
-            return false;    
         }
         return true;
     }
 
     /**
-     * Ein Beispiel einer Methode - ersetzen Sie diesen Kommentar mit Ihrem eigenen
+     * Kommentar TODO
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
@@ -117,16 +114,17 @@ public class Board
         if(field[x][y]instanceof Water)  {
             return ShotEvent.MISS;
         } else if(field[x][y]instanceof ShipField)  {
+
             if(((ShipField) field[x][y]).getShip().length()<=0){
-                
+
                 return ShotEvent.SUNK;           
             }
             return ShotEvent.HIT;
         }
         return ShotEvent.FAILED;
     }
+
     public boolean checkEnd() {
-        //TODO
-        return false;
+
     }
 }
