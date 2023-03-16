@@ -24,4 +24,13 @@ public class PlayerSet
     {
         return player2.getUsername();
     }
+    
+    public void setRematch(boolean _rematch)
+    {
+        rematch = _rematch;
+    }
+    public boolean getRematch()
+    {
+        return rematch;
+    }
 }
