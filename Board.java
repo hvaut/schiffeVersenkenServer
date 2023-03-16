@@ -121,11 +121,17 @@ public class Board
             Ship ship = ((ShipField)field[x][y]).getShip();
             if(ship.length() <=0)
             {
+                //Reduces the amount of available ships
                 if (ships[ship.getOriginalLength()] > 0)
+                    //The first index stores a ship with the length of 2, 
+                    //so if the ship length equals 2, it will access index 0
                     ships[ship.getOriginalLength()-2]--;
                 
                 return ShotEvent.SUNK;           
             }
+            
+            //Reduce the ships length because it directly corrolates to the amount of available fields
+            ship.reduceLength();
             return ShotEvent.HIT;
         }
         return ShotEvent.FAILED;
