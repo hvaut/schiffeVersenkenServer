@@ -1,19 +1,19 @@
 /**
  * @author Nikita Funk und John Braun
- * @version 13.03.2023
+ * @version 16.03.2023
  */
 public class Lobby extends Server
 {
     private List<User> userlist;
     private List<User> playerLobby;
     private List<User> games;
-
+    
     /**
      * Constructor for objects from class Lobby
      * Includes:
      * An userlist to list all existing user
-     * A List named playerLobby that includes every user who you can play with
-     * A List named games that includes all active games
+     * A List called playerLobby that includes every user who you can play with
+     * A List called games that includes all active games
      */
     public Lobby(int pPort)
     {
@@ -148,6 +148,7 @@ public class Lobby extends Server
      * Method startGame starts a new game and adds the two Users to the games list
      * To avoid getting invalid requests we remove both users from the playerLobby list
      * Requires a lobby and two Users to start a new game
+     * @param count counts the users we removed from the playerLobby
      */
     public void startGame(User p1, User p2) {
         Game newGame = new Game(p1, p2, this);
@@ -157,20 +158,27 @@ public class Lobby extends Server
         games.append(p2);
 
         //Removing both users from the playerLobby list
+        int count = 0;
         playerLobby.toFirst();
         while (playerLobby.hasAccess()){
             if (playerLobby.getContent() == p1){
                 playerLobby.remove();
-                break;
+                count++;
+                if (count == 2){
+                    break;
+                }
+                else{playerLobby.next();}
             }
-            else{playerLobby.next();}
-        }
-        playerLobby.toFirst();
-        while (playerLobby.hasAccess()){
-            if (playerLobby.getContent() == p2){
+
+            else if (playerLobby.getContent() == p2){
                 playerLobby.remove();
-                break;
+                count++;
+                if (count == 2){
+                    break;
+                }
+                else{playerLobby.next();}
             }
+
             else{playerLobby.next();}
         }
     }
@@ -178,26 +186,35 @@ public class Lobby extends Server
     /**
      * Method endGame ends a game
      * Requires two Users
-     * 
+     * @param count counts the users we removed from the playerLobby
      */
     public void endGame(User p1, User p2, boolean pWon){
         //Adding both users to the playerLobby list
         playerLobby.append(p1);
         playerLobby.append(p2);
-
+        
         //Removing both users from the games list
+        int count = 0;
         games.toFirst();
         while (games.hasAccess()){
             if (games.getContent() == p1){
                 games.remove();
+                count++;
+                if (count == 2){
+                    break;
+                }
+                else{games.next();}
             }
-            else{games.next();}
-        }
-        games.toFirst();
-        while (games.hasAccess()){
-            if (games.getContent() == p2){
+
+            else if (games.getContent() == p2){
                 games.remove();
+                count++;
+                if (count == 2){
+                    break;
+                }
+                else{games.next();}
             }
+
             else{games.next();}
         }
     }
