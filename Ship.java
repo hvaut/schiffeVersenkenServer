@@ -33,6 +33,11 @@ public class Ship
     public int getOriginalLength() {
         return originalLength;
     }
+    
+    public void reduceLength()
+    {
+        length--;
+    }
 
     public int x1() {
         return x1;

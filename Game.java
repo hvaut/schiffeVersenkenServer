@@ -73,7 +73,7 @@ public class Game
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: placement is invalid");
                 return;
             default:
-
+                return;
         }
     }
 
@@ -100,14 +100,17 @@ public class Game
         }*/
         if(player.getUsername().equals(currentPlayer.getUsername()))
         {
-            if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
-            {
-                server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
-                //sendNextMove(player);
-                return;
-            }
+                // if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
+                // {
+                    // server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+                    // //sendNextMove(player);
+                    // return;
+                // }
             ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
             switch (result){
+                case FAILED:
+                    server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+                    break;
                 case MISS:
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: miss");
                     break;
@@ -116,9 +119,6 @@ public class Game
                     break;
                 case SUNK:
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
-                    break;
-                case FAILED:
-                    server.send(currentPlayer.getIP(), currentPlayer.getPort(), "-SHOOT");
                     break;
                 default:
                     break;
