@@ -102,7 +102,7 @@ public class Lobby extends Server
         }
         return player;
     }
-    
+
     /**
      * Method getPlayerbyName returns a User
      * Requires the username to identify the correct User
@@ -243,9 +243,24 @@ public class Lobby extends Server
                     send(pIP, pPort, "-REQUESTENEMY:enemy rejected");
                     break;
                 }
+            case "LEADERBOARD":
+                String response = "+LEADERBOARD:";
+                userlist.toFirst();
+                while (!userlist.isEmpty()) 
+                {
+                    User usr = userlist.getContent();
+                    response += usr.getUsername() + "," + usr.getScore() + ":";
+                    userlist.next();
+                }
+                userlist.toFirst();
+                
+                response = response.substring(0, response.length() - 1);
+                send(pIP, pPort, response);
+                break;
         }
     }
 
     public void processNewConnection(String pClientIP, int pClientPort){}
+
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }
