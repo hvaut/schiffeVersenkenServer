@@ -16,13 +16,13 @@ public class PlayerSet
         player2 = _player2;
     }
 
-    public String player1()
+    public User getPlayer1()
     {
-        return player1.getUsername();
+        return player1;
     }
-    public String player2()
+    public User getPlayer2()
     {
-        return player2.getUsername();
+        return player2;
     }
     
     public void setRematch(boolean _rematch)

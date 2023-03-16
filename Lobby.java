@@ -7,7 +7,8 @@ public class Lobby extends Server
     private List<User> userlist;
     private List<User> playerLobby;
     private List<User> games;
-    
+    private List<PlayerSet> rematch;
+
     /**
      * Constructor for objects from class Lobby
      * Includes:
@@ -21,6 +22,7 @@ public class Lobby extends Server
         userlist = new List<User>();
         playerLobby = new List<User>();
         games = new List<User>();
+        rematch = new List<PlayerSet>();
     }
 
     /**
@@ -196,9 +198,10 @@ public class Lobby extends Server
      */
     public void endGame(User p1, User p2, boolean pWon){
         //Adding both users to the playerLobby list
-        playerLobby.append(p1);
-        playerLobby.append(p2);
-        
+        //playerLobby.append(p1);
+        //playerLobby.append(p2);
+        rematch.append(new PlayerSet(p1,p2));
+
         //Removing both users from the games list
         int count = 0;
         games.toFirst();
@@ -224,6 +227,53 @@ public class Lobby extends Server
             else{games.next();}
         }
         games.toFirst();
+    }
+
+    public void Rematch(User p1){
+        rematch.toFirst();
+        String pIP;
+        int pPort;
+        while (rematch.hasAccess()){
+            PlayerSet tmp = rematch.getContent();
+            if (tmp.getPlayer1().getUsername() == p1.getUsername()){
+                if(tmp.getRematch()){
+                    startGame(tmp.getPlayer1(), tmp.getPlayer2());
+                    return;
+                }
+
+                pIP = tmp.getPlayer2().getIP();
+                pPort = tmp.getPlayer2().getPort();
+                send(pIP, pPort, "GETREMATCH");
+                tmp.setRematch(true);
+                return;
+
+            }
+            else if(tmp.getPlayer2().getUsername() == p1.getUsername()){
+                if(tmp.getRematch()){
+                    startGame(tmp.getPlayer1(), tmp.getPlayer2());
+                    return;
+                }
+
+                pIP = tmp.getPlayer1().getIP();
+                pPort = tmp.getPlayer1().getPort();
+                send(pIP, pPort, "GETREMATCH");
+                tmp.setRematch(true);
+                return;
+            }
+            else{rematch.next();}
+        }
+    }
+
+    public void startRematch(User p1){
+        rematch.toFirst();
+        while(rematch.hasAccess()){
+            PlayerSet tmp = rematch.getContent();
+            if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
+                startGame(tmp.getPlayer1(), tmp.getPlayer2());
+                return;
+            }
+            else{rematch.next();}
+        }
     }
 
     /**
@@ -277,11 +327,11 @@ public class Lobby extends Server
                     userlist.next();
                 }
                 userlist.toFirst();
-                
+
                 response = response.substring(0, response.length() - 1);
                 send(pIP, pPort, response);
                 break;
-                
+
             case "GETENEMIES":
                 String enemies = "+GETENEMIES:";
                 userlist.toFirst();
@@ -292,9 +342,20 @@ public class Lobby extends Server
                     userlist.next();
                 }
                 userlist.toFirst();
-                
+
                 enemies = enemies.substring(0, enemies.length() - 1);
                 send(pIP, pPort, enemies);
+                break;
+
+            case "REMATCH":
+                Rematch(tmp);
+                break;
+
+            case "+GETREMATCH":
+                if("true".equals(Message[1])){
+                    startRematch(tmp);
+                }
+                else{return;}
                 break;
         }
     }
