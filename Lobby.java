@@ -7,7 +7,7 @@ public class Lobby extends Server
     private List<User> userlist;
     private List<User> playerLobby;
     private List<User> games;
-    
+
     /**
      * Constructor for objects from class Lobby
      * Includes:
@@ -126,16 +126,19 @@ public class Lobby extends Server
 
     /**
      * Method request sends a request to a User for a new game
-     *
+     * To check if the User is available for a game we search in the playerLobby list for the User
+     * When the User is not in the list we know that the User is not connected to the server or in a game right now
      * @param p1 is the User that sends the request
      * @param p2 is the User that receives the request
      */
     public void request(User p1, User p2){
         boolean playerIsAvailable = false;
         playerLobby.toFirst();
+        
+        //Identifying if the user is connected to the server and not in a game
         while(playerLobby.hasAccess()){
             if (playerLobby.getContent() == p2){
-                playerIsAvailable = true;
+                playerIsAvailable = true; //Setting the boolean to true, so we know that the player is available
                 break;
             }
             else{playerLobby.next();}
@@ -147,6 +150,44 @@ public class Lobby extends Server
             send(p1.getIP(), p1.getPort(), "-GETREQUEST:user not available");
         }
         playerLobby.toFirst();
+    }
+
+    /**
+     * Method leaderboard gives us the leaderboard
+     */
+    public String leaderboard(){
+        String leaderboard = "+LEADERBOARD:";
+        userlist.toFirst();
+        while (!userlist.isEmpty()) 
+        {
+            User usr = userlist.getContent();
+            leaderboard += usr.getUsername() + "," + usr.getScore() + ":";
+            userlist.next();
+        }
+        userlist.toFirst();
+
+        leaderboard = leaderboard.substring(0, leaderboard.length() - 1);
+
+        return leaderboard;
+    }
+
+    /**
+     * Method enemies gives us the leaderboard
+     */
+    public String enemies(){
+        String enemies = "+GETENEMIES:";
+        userlist.toFirst();
+        while (!userlist.isEmpty()) 
+        {
+            User usr = userlist.getContent();
+            enemies += usr.getUsername() + ",";
+            userlist.next();
+        }
+        userlist.toFirst();
+
+        enemies = enemies.substring(0, enemies.length() - 1);
+        
+        return enemies;
     }
 
     /**
@@ -198,7 +239,7 @@ public class Lobby extends Server
         //Adding both users to the playerLobby list
         playerLobby.append(p1);
         playerLobby.append(p2);
-        
+
         //Removing both users from the games list
         int count = 0;
         games.toFirst();
@@ -223,14 +264,15 @@ public class Lobby extends Server
 
             else{games.next();}
         }
+
         games.toFirst();
     }
 
     /**
      * Method processMessage
      *
-     * @param pIP is the users ip that send the message
-     * @param pPort is the users port that send the message
+     * @param pIP is the users ip that sent the message
+     * @param pPort is the users port that sent the message
      * @param pMessage is the message (duh)
      * @param tmp is sending the message
      */
@@ -256,11 +298,10 @@ public class Lobby extends Server
 
             case "+GETREQUEST":
                 if("true".equals(Message[1])){
-                    User player2 = getPlayerByName(Message[2]);
-                    startGame(tmp, player2);
-
-                    send(pIP, pPort, "STATUS:GAME");
-                    send(player2.getIP(), player2.getPort(), "STATUS:GAME");
+                    User player2 = getPlayerByName(Message[2]); //Saving the second player
+                    startGame(tmp, player2); //starting the game
+                    send(pIP, pPort, "STATUS:GAME"); //updating the STATUS from player 1
+                    send(player2.getIP(), player2.getPort(), "STATUS:GAME"); //updating the STATUS from player 2
                     break;
                 }
                 else{
@@ -268,38 +309,22 @@ public class Lobby extends Server
                     break;
                 }
             case "LEADERBOARD":
-                String response = "+LEADERBOARD:";
-                userlist.toFirst();
-                while (!userlist.isEmpty()) 
-                {
-                    User usr = userlist.getContent();
-                    response += usr.getUsername() + "," + usr.getScore() + ":";
-                    userlist.next();
-                }
-                userlist.toFirst();
-                
-                response = response.substring(0, response.length() - 1);
-                send(pIP, pPort, response);
+                send(pIP, pPort, leaderboard());
                 break;
-                
+
             case "GETENEMIES":
-                String enemies = "+GETENEMIES:";
-                userlist.toFirst();
-                while (!userlist.isEmpty()) 
-                {
-                    User usr = userlist.getContent();
-                    enemies += usr.getUsername() + ",";
-                    userlist.next();
-                }
-                userlist.toFirst();
-                
-                enemies = enemies.substring(0, enemies.length() - 1);
-                send(pIP, pPort, enemies);
+                send(pIP, pPort, enemies());
                 break;
         }
     }
 
-    public void processNewConnection(String pClientIP, int pClientPort){}
+    /**
+     * Method processNewConnection updates the STATUS from the User that connected to the server
+     *
+     * @param pIP is the users ip that connected to the server
+     * @param pPort is the users port that connected to the server
+     */
+    public void processNewConnection(String pClientIP, int pClientPort){send(pClientIP, pClientPort, "STATUS:LOGIN");}
 
     public void processClosingConnection(String pClientIP, int pClientPort){}
 }
