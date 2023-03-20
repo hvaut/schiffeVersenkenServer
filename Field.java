@@ -7,7 +7,6 @@
 public abstract class Field
 {
     private boolean hit;
-    
     /**
      * Construktor for objectes of the class Field
      */
