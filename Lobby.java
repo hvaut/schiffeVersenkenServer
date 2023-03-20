@@ -8,6 +8,7 @@ public class Lobby extends Server
     private List<User> playerLobby;
     private List<Game> games;
     private List<PlayerSet> rematch;
+    private List<User> leaderboard;
 
     /**
      * Constructor for objects from class Lobby
@@ -23,6 +24,7 @@ public class Lobby extends Server
         playerLobby = new List<User>();
         games = new List<Game>();
         rematch = new List<PlayerSet>();
+        leaderboard = new List<User>();
     }
 
     /**
@@ -173,6 +175,45 @@ public class Lobby extends Server
         return leaderboard;
     }
 
+    public void sortLeaderboard(List<User> pList, int test){
+        pList.toFirst();
+        List<User> left = new List<User>();
+        List<User> right = new List<User>();
+
+        int i = 0;
+        while (pList.hasAccess()){
+            i++;
+            pList.next();
+        }
+        pList.toFirst();
+        User pivot = pList.getContent();
+        pList.next();
+
+        for (int j=0; j<i; j++){
+            if (pivot.getScore() <= pList.getContent().getScore()){
+                left.append(pList.getContent());
+            }
+            else{
+                right.append(pList.getContent());
+            }
+            pList.next();
+        }
+
+        if (i < 1){
+            left.concat(right);
+            leaderboard = left;
+        }
+        else{
+            if (test == 0){
+                sortLeaderboard(left, 1);
+            }
+            else{
+                sortLeaderboard(right, 0);
+            }
+        }
+
+    }
+
     /**
      * Method enemies gives us the enemies
      */
@@ -192,6 +233,10 @@ public class Lobby extends Server
         return enemies;
     }
 
+    /**
+     * Method findGame finds the game that contains the two players
+     * @param p1 is one of the two player
+     */
     public Game findGame(User p1){
         games.toFirst();
         while (games.hasAccess()){
@@ -204,6 +249,10 @@ public class Lobby extends Server
         return null;
     }
 
+    /**
+     * Method removeGame removes a game from the games list that ended
+     * @param p1 is on of the two player
+     */
     public void removeGame(User p1){
         games.toFirst();
         while (games.hasAccess()){
@@ -213,6 +262,29 @@ public class Lobby extends Server
                 return;
             }
             else{games.next();}
+        }
+    }
+
+    /**
+     * Method removePlayerSet removes a PlayerSet
+     *
+     * @param p1 is on of the two players that is in the PlayerSet
+     */
+    public void removePlayerSet(User p1){
+        rematch.toFirst();
+        while(rematch.hasAccess()){
+            PlayerSet tmp = rematch.getContent();
+            if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
+                playerLobby.append(tmp.getPlayer1());
+                playerLobby.append(tmp.getPlayer2());
+                User player1 = tmp.getPlayer1();
+                User player2 = tmp.getPlayer2();
+                send(player1.getIP(), player1.getPort(), "STATUS:LOBBY");
+                send(player2.getIP(), player2.getPort(), "STATUS:LOBBY");
+                rematch.remove();
+                return;
+            }
+            else{rematch.next();}
         }
     }
 
@@ -308,24 +380,6 @@ public class Lobby extends Server
             PlayerSet tmp = rematch.getContent();
             if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
                 startGame(tmp.getPlayer1(), tmp.getPlayer2());
-                return;
-            }
-            else{rematch.next();}
-        }
-    }
-
-    public void removePlayerSet(User p1){
-        rematch.toFirst();
-        while(rematch.hasAccess()){
-            PlayerSet tmp = rematch.getContent();
-            if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
-                playerLobby.append(tmp.getPlayer1());
-                playerLobby.append(tmp.getPlayer2());
-                User player1 = tmp.getPlayer1();
-                User player2 = tmp.getPlayer2();
-                send(player1.getIP(), player1.getPort(), "STATUS:LOBBY");
-                send(player2.getIP(), player2.getPort(), "STATUS:LOBBY");
-                rematch.remove();
                 return;
             }
             else{rematch.next();}
