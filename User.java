@@ -14,7 +14,7 @@ public class User
     Game game;
     int gamesLost = 0;
     int gamesWon = 0;
-    int score = gamesWon/gamesLost;
+    int score = 0;
 
     /**
      * Konstruktor für Objekte der Klasse User
@@ -60,6 +60,7 @@ public class User
     public void increaseWins()
     {
         gamesWon++;
+        score = gamesWon/gamesLost;
     }
 
     public int getLosses()
@@ -70,6 +71,7 @@ public class User
     public void increaseLosses()
     {
         gamesLost++;
+        score = gamesWon/gamesLost;
     }
 
     public int getScore()
