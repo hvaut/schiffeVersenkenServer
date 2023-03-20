@@ -189,26 +189,4 @@ public class Board
             }
         }
     }
-
-    public void hit(int x, int y) {
-        field[x][y].hit();
-        //Update
-    }
-    
-    public void miss(int x, int y) {
-        field[x][y].hit();
-    }
-
-    public void fieldUpdate(FieldEvent event,int x,int y) {
-        switch(event) {
-            case HIT:
-                break;
-            case MISS:
-                break;
-            case SUNK:
-                break;
-            case SHIP:
-                break;
-        }
-    }
 }
