@@ -111,9 +111,9 @@ public class Game
             if(!ShotEvent.FAILED.equals(result))
             {
                 //Update the current Player
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = Feld des Gegners
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = board of the enemy
                 //Update the other Player
-                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = eigenes Feld
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = own board
             }
             
             
