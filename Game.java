@@ -192,4 +192,9 @@ public class Game
     {
         return state;
     }
+    
+    public Lobby getServer()
+    {
+        return server;
+    }
 }
