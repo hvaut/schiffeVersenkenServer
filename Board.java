@@ -55,7 +55,7 @@ public class Board
             || pShip.length() == 3 && ships[1] > 0
             || pShip.length() == 4 && ships[2] > 0
             || pShip.length() == 5 && ships[3] > 0)
-                return PlacementEvent.VALID;
+                return PlacementEvent.SHIP;
         } 
         return PlacementEvent.INVALID;
     }
@@ -74,11 +74,13 @@ public class Board
     {
         Ship pShip = new Ship(x1,x2,y1,y2);
         var event = checkPlacement(pShip);
-        if(PlacementEvent.VALID.equals(event)){
+        if(PlacementEvent.SHIP.equals(event)){
+            
             for(int i=x1;i<=x2;i++) {
                 for(int j=y1;j<=y2;j++) {
                     field[i][j] = new ShipField(pShip);
                     //Update PLACE
+                    
                 }    
             }
         }

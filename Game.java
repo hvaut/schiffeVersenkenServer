@@ -49,9 +49,15 @@ public class Game
             tempBoard = board2;
         }
         PlacementEvent result = tempBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement
+        for(int i=x1;i<=x2;i++) {
+            for(int j=y1;j<=y2;j++) {
+                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);
+                //TODO get the right Field ID
+            }    
+        }
         switch(result)
         {
-            case VALID:
+            case SHIP:
                 int[] ships = tempBoard.getShips();
                 String shipString = "";
                 for(int i = 0; i < ships.length; i++)
@@ -106,8 +112,7 @@ public class Game
                 default:
                     break;
             }
-            
-            
+
             if(!ShotEvent.FAILED.equals(result))
             {
                 //Update the current Player
@@ -115,8 +120,7 @@ public class Game
                 //Update the other Player
                 server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = own board
             }
-            
-            
+
             //changes the active player
             if(player1==currentPlayer){
                 currentPlayer = player2;
@@ -134,8 +138,7 @@ public class Game
                 endGame();
                 return;
             }
-            
-            
+
             sendNextMove(currentPlayer);//sends the other player a notification
         }
         else
@@ -181,7 +184,7 @@ public class Game
     {
         return state;
     }
-    
+
     /**
      * Method getPlayer1
      * returns the first player, required for the Lobby class
@@ -191,7 +194,7 @@ public class Game
     {
         return player1;
     }
-    
+
     /**
      * Method getPlayer2
      * returns the second player, required for the Lobby class
@@ -201,7 +204,7 @@ public class Game
     {
         return player2;
     }
-    
+
     public Lobby getServer()
     {
         return server;
