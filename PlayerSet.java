@@ -16,33 +16,14 @@ public class PlayerSet
         player2 = _player2;
     }
 
-<<<<<<< HEAD
-    public User getPlayer1()
-=======
-    /**
-     * Methode player1
-     *
-     * @return returns the Username of player1
-     */
-    public String player1()
->>>>>>> f0f8931f33af253bdfc1ecf0d69dbae12614192a
-    {
+    public User getPlayer1(){
         return player1;
     }
-<<<<<<< HEAD
-    public User getPlayer2()
-=======
-    /**
-     * Methode player2
-     *
-     * @return returns the Username of player2
-     */
-    public String player2()
->>>>>>> f0f8931f33af253bdfc1ecf0d69dbae12614192a
-    {
+
+    public User getPlayer2(){
         return player2;
     }
-    
+
     /**
      * Methode setRematch
      * sets the rematch boolean to the given value
@@ -52,6 +33,7 @@ public class PlayerSet
     {
         rematch = _rematch;
     }
+
     /**
      * Methode getRematch
      *
