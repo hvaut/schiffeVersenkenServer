@@ -87,26 +87,8 @@ public class Game
      */
     public void shoot(int x, int y, User player)
     {
-        //User otherPlayer;
-        //Board currentBoard;
-        /*if(player.getUsername().equals(player1.getUsername()))
-        {
-        currentPlayer = player1;
-        otherPlayer = player2;
-        currentBoard = board1;
-        } else {
-        currentPlayer = player2;
-        otherPlayer = player1;
-        currentBoard = board2;
-        }*/
         if(player.getUsername().equals(currentPlayer.getUsername()))
         {
-            // if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
-            // {
-            // server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
-            // //sendNextMove(player);
-            // return;
-            // }
             ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
             switch (result){
                 case FAILED:
@@ -124,13 +106,17 @@ public class Game
                 default:
                     break;
             }
-            //Update the current Player 
+            
+            
             if(!ShotEvent.FAILED.equals(result))
             {
-                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = Feld des Gegners
+                //Update the current Player
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = board of the enemy
                 //Update the other Player
-                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = eigenes Feld
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = own board
             }
+            
+            
             //changes the active player
             if(player1==currentPlayer){
                 currentPlayer = player2;
@@ -148,6 +134,8 @@ public class Game
                 endGame();
                 return;
             }
+            
+            
             sendNextMove(currentPlayer);//sends the other player a notification
         }
         else
