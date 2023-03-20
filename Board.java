@@ -78,7 +78,7 @@ public class Board
             for(int i=x1;i<=x2;i++) {
                 for(int j=y1;j<=y2;j++) {
                     field[i][j] = new ShipField(pShip);
-                }    
+                }
             }
         }
         return event;
@@ -146,8 +146,10 @@ public class Board
         int y2 = ship.y2();
         int x1 = ship.x1();
         int x2 = ship.x2();
+
         //Vertical Ship
-        if(x1 == x2){
+        if(x1 == x2)
+        {
             if(y1>y2) {
                 var temp = y1;
                 y1 = y2;
@@ -161,12 +163,14 @@ public class Board
             field[x1][y1-1].hit();
             y1--;
             //The Fields on both sides of the ships
-            for(int i = y1;i<=y2+1;i++) {
+            for(int i = y1;i<=y2+1;i++)
+            {
                 field[temp1][i].hit();
                 field[temp2][i].hit();
             }
-        } else {
-            //Horizontal Ship
+        }
+        else //Horizontal Ship
+        {
             if(x1>x2) {
                 var swap = x1;
                 x1 = x2;
@@ -180,10 +184,12 @@ public class Board
             field[x2+1][y1].hit();
             x1--;
             //The Fields on both sides of the ships
-            for(int i = x1;i<=x2+1;i++) {
+            for(int i = x1;i<=x2+1;i++)
+            {
                 field[i][temp1].hit();
                 field[i][temp2].hit();
             }
-        }
+        }       
     }
+}
 }

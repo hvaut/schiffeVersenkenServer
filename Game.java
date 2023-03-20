@@ -231,4 +231,24 @@ public class Game
     {
         return state;
     }
+    
+    /**
+     * Method getPlayer1
+     * returns the first player, required for the Lobby class
+     * @return User
+     */
+    public User getPlayer1() 
+    {
+        return player1;
+    }
+    
+    /**
+     * Method getPlayer2
+     * returns the second player, required for the Lobby class
+     * @return User
+     */
+    public User getPlayer2() 
+    {
+        return player2;
+    }
 }
