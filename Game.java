@@ -75,6 +75,7 @@ public class Game
             default:
                 return;
         }
+        //TODO Field update for each ship
     }
 
     /**
@@ -100,12 +101,12 @@ public class Game
         }*/
         if(player.getUsername().equals(currentPlayer.getUsername()))
         {
-                // if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
-                // {
-                    // server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
-                    // //sendNextMove(player);
-                    // return;
-                // }
+            // if(!currentBoard.checkShot(x, y))//checks if the shot is invalid
+            // {
+            // server.send(player.getIP(), player.getPort(), "-SHOOT:position invalid");
+            // //sendNextMove(player);
+            // return;
+            // }
             ShotEvent result = currentBoard.processShot(x, y); //result of the shot given as an integer: 0 = miss, 1 = hit, 2 = ship down
             switch (result){
                 case FAILED:

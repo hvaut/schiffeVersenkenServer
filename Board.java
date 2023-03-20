@@ -46,7 +46,7 @@ public class Board
         if (pShip.x1() >= boardSize || pShip.x2() >= boardSize || pShip.y1() >= boardSize || pShip.y2() >= boardSize
         || pShip.x1() < 0 || pShip.x2() < 0 || pShip.y1() < 0 || pShip.y2() < 0)
             return PlacementEvent.OUT_OF_BOUNDS;
-            
+
         //Invalidate in case the ship is not horizontally/vertically placed
         if (pShip.x1() == pShip.x2() || pShip.y1() == pShip.y2()) 
         {
@@ -120,9 +120,11 @@ public class Board
             {
                 //Reduces the amount of available ships
                 if (ships[ship.getOriginalLength()] > 0)
-                    //The first index stores a ship with the length of 2, 
-                    //so if the ship length equals 2, it will access index 0
+                //The first index stores a ship with the length of 2, 
+                //so if the ship length equals 2, it will access index 0
                     ships[ship.getOriginalLength()-2]--;
+                //Eliminate all Fields adjecend to the sunk ship
+                sinkShip(x,y);
                 return ShotEvent.SUNK;           
             }
             //Reduce the ships length because it directly corrolates to the amount of available fields
@@ -136,5 +138,52 @@ public class Board
         if (ships[0] == 0 && ships[1] == 0 && ships[2] == 0 && ships[3] == 0)
             return true; 
         return false;
+    }
+
+    private void sinkShip(int x, int y) {
+        Ship ship = ((ShipField)field[x][y]).getShip();
+        int y1 = ship.y1();
+        int y2 = ship.y2();
+        int x1 = ship.x1();
+        int x2 = ship.x2();
+        //Vertical Ship
+        if(x1 == x2){
+            if(y1>y2) {
+                var temp = y1;
+                y1 = y2;
+                y2 = temp;
+            }
+            var temp1 = x1--;
+            var temp2 = x1++;
+            //The Field below the ship
+            field[x1][y2+1].hit();
+            //Field above the ship
+            field[x1][y1-1].hit();
+            y1--;
+            //The Fields on both sides of the ships
+            for(int i = y1;i<=y2+1;i++) {
+                field[temp1][i].hit();
+                field[temp2][i].hit();
+            }
+        } else {
+            //Horizontal Ship
+            if(x1>x2) {
+                var swap = x1;
+                x1 = x2;
+                x2 = swap;
+            }
+            var temp1 = y1--;
+            var temp2 = y1++;
+            //The Field below the ship
+            field[x1-1][y1].hit();
+            //Field above the ship
+            field[x2+1][y1].hit();
+            x1--;
+            //The Fields on both sides of the ships
+            for(int i = x1;i<=x2+1;i++) {
+                field[i][temp1].hit();
+                field[i][temp2].hit();
+            }
+        }
     }
 }
