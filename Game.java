@@ -125,11 +125,12 @@ public class Game
                     break;
             }
             //Update the current Player 
-            //Kannst du den Zeichencodes am Ende erklären
-            server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = Feld des Gegners
-            //Update the other Player
-            server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = eigenes Feld
-
+            if(!ShotEvent.FAILED.equals(result))
+            {
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = Feld des Gegners
+                //Update the other Player
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = eigenes Feld
+            }
             //changes the active player
             if(player1==currentPlayer){
                 currentPlayer = player2;
