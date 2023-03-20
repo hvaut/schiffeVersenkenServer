@@ -6,7 +6,7 @@ public class Lobby extends Server
 {
     private List<User> userlist;
     private List<User> playerLobby;
-    private List<User> games;
+    private List<Game> games;
     private List<PlayerSet> rematch;
 
     /**
@@ -21,7 +21,7 @@ public class Lobby extends Server
         super(pPort);
         userlist = new List<User>();
         playerLobby = new List<User>();
-        games = new List<User>();
+        games = new List<Game>();
         rematch = new List<PlayerSet>();
     }
 
@@ -136,7 +136,7 @@ public class Lobby extends Server
     public void request(User p1, User p2){
         boolean playerIsAvailable = false;
         playerLobby.toFirst();
-        
+
         //Identifying if the user is connected to the server and not in a game
         while(playerLobby.hasAccess()){
             if (playerLobby.getContent() == p2){
@@ -174,22 +174,46 @@ public class Lobby extends Server
     }
 
     /**
-     * Method enemies gives us the leaderboard
+     * Method enemies gives us the enemies
      */
     public String enemies(){
         String enemies = "+GETENEMIES:";
-        userlist.toFirst();
-        while (!userlist.isEmpty()) 
+        playerLobby.toFirst();
+        while (!playerLobby.isEmpty()) 
         {
-            User usr = userlist.getContent();
+            User usr = playerLobby.getContent();
             enemies += usr.getUsername() + ",";
             userlist.next();
         }
-        userlist.toFirst();
+        playerLobby.toFirst();
 
         enemies = enemies.substring(0, enemies.length() - 1);
-        
+
         return enemies;
+    }
+
+    public Game findGame(User p1){
+        games.toFirst();
+        while (games.hasAccess()){
+            Game tmp = games.getContent();
+            if (games.getContent().getPlayer1() == p1 || games.getContent().getPlayer2() == p1){
+                return games.getContent();
+            }
+            else{games.next();}
+        }
+        return null;
+    }
+
+    public void removeGame(User p1){
+        games.toFirst();
+        while (games.hasAccess()){
+            Game tmp = games.getContent();
+            if (games.getContent().getPlayer1() == p1 || games.getContent().getPlayer2() == p1){
+                games.remove();
+                return;
+            }
+            else{games.next();}
+        }
     }
 
     /**
@@ -202,8 +226,7 @@ public class Lobby extends Server
         Game newGame = new Game(p1, p2, this);
 
         //Adding both users to the games list
-        games.append(p1);
-        games.append(p2);
+        games.append(newGame);
 
         //Removing both users from the playerLobby list
         int count = 0;
@@ -235,41 +258,13 @@ public class Lobby extends Server
     /**
      * Method endGame ends a game
      * Requires two Users
-     * @param count counts the users we removed from the playerLobby
      */
     public void endGame(User p1, User p2, boolean pWon){
-        //Adding both users to the playerLobby list
-        //playerLobby.append(p1);
-        //playerLobby.append(p2);
+        //Adding both players to the rematch list
         rematch.append(new PlayerSet(p1,p2));
 
-
         //Removing both users from the games list
-        int count = 0;
-        games.toFirst();
-        while (games.hasAccess()){
-            if (games.getContent() == p1){
-                games.remove();
-                count++;
-                if (count == 2){
-                    break;
-                }
-                else{games.next();}
-            }
-
-            else if (games.getContent() == p2){
-                games.remove();
-                count++;
-                if (count == 2){
-                    break;
-                }
-                else{games.next();}
-            }
-
-            else{games.next();}
-        }
-
-        games.toFirst();
+        removeGame(p1);
     }
 
     public void Rematch(User p1){
@@ -313,6 +308,24 @@ public class Lobby extends Server
             PlayerSet tmp = rematch.getContent();
             if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
                 startGame(tmp.getPlayer1(), tmp.getPlayer2());
+                return;
+            }
+            else{rematch.next();}
+        }
+    }
+
+    public void removePlayerSet(User p1){
+        rematch.toFirst();
+        while(rematch.hasAccess()){
+            PlayerSet tmp = rematch.getContent();
+            if (tmp.getPlayer1().getUsername() == p1.getUsername() || tmp.getPlayer2().getUsername() == p1.getUsername()){
+                playerLobby.append(tmp.getPlayer1());
+                playerLobby.append(tmp.getPlayer2());
+                User player1 = tmp.getPlayer1();
+                User player2 = tmp.getPlayer2();
+                send(player1.getIP(), player1.getPort(), "STATUS:LOBBY");
+                send(player2.getIP(), player2.getPort(), "STATUS:LOBBY");
+                rematch.remove();
                 return;
             }
             else{rematch.next();}
@@ -375,7 +388,10 @@ public class Lobby extends Server
                 if("true".equals(Message[1])){
                     startRematch(tmp);
                 }
-                else{return;}
+                else{
+                    send(pIP, pPort, "-GETREMATCH:false");
+                    removePlayerSet(tmp);
+                }
                 break;
         }
     }
