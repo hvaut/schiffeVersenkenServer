@@ -78,6 +78,7 @@ public class Board
             for(int i=x1;i<=x2;i++) {
                 for(int j=y1;j<=y2;j++) {
                     field[i][j] = new ShipField(pShip);
+                    //Update PLACE
                 }    
             }
         }
@@ -113,6 +114,7 @@ public class Board
         field[x][y].hit();
         if(field[x][y]instanceof Water)  {
             return ShotEvent.MISS;
+            //FieldUpdate
         } else if(field[x][y]instanceof ShipField)
         {
             Ship ship = ((ShipField)field[x][y]).getShip();
@@ -130,6 +132,7 @@ public class Board
             //Reduce the ships length because it directly corrolates to the amount of available fields
             ship.reduceLength();
             return ShotEvent.HIT;
+            //Fieldupdate
         }
         return ShotEvent.FAILED;
     }
@@ -184,6 +187,28 @@ public class Board
                 field[i][temp1].hit();
                 field[i][temp2].hit();
             }
+        }
+    }
+
+    public void hit(int x, int y) {
+        field[x][y].hit();
+        //Update
+    }
+    
+    public void miss(int x, int y) {
+        field[x][y].hit();
+    }
+
+    public void fieldUpdate(FieldEvent event,int x,int y) {
+        switch(event) {
+            case HIT:
+                break;
+            case MISS:
+                break;
+            case SUNK:
+                break;
+            case SHIP:
+                break;
         }
     }
 }
