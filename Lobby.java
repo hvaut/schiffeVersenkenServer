@@ -175,11 +175,11 @@ public class Lobby extends Server
         return leaderboard;
     }
 
-    public void sortLeaderboard(List<User> pList, int test){
-        pList.toFirst();
+    public void sortLeaderboard(List<User> pList){
         List<User> left = new List<User>();
         List<User> right = new List<User>();
 
+        pList.toFirst();
         int i = 0;
         while (pList.hasAccess()){
             i++;
@@ -187,9 +187,9 @@ public class Lobby extends Server
         }
         pList.toFirst();
         User pivot = pList.getContent();
-        pList.next();
+        pList.remove();
 
-        for (int j=0; j<i; j++){
+        while (pList.hasAccess()){
             if (pivot.getScore() <= pList.getContent().getScore()){
                 left.append(pList.getContent());
             }
@@ -198,20 +198,16 @@ public class Lobby extends Server
             }
             pList.next();
         }
+        left.append(pivot);
 
-        if (i < 1){
+        if (i <= 1){
             left.concat(right);
             leaderboard = left;
         }
         else{
-            if (test == 0){
-                sortLeaderboard(left, 1);
-            }
-            else{
-                sortLeaderboard(right, 0);
-            }
+            sortLeaderboard(left);
+            sortLeaderboard(right);
         }
-
     }
 
     /**
@@ -427,6 +423,7 @@ public class Lobby extends Server
                     break;
                 }
             case "LEADERBOARD":
+                sortLeaderboard(userlist);
                 send(pIP, pPort, leaderboard());
                 break;
 
