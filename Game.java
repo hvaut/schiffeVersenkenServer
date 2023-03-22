@@ -132,9 +132,20 @@ public class Game
                 currentBoard = board1;
             }
 
-            if(
-            checkEnd())
+            if(checkEnd())
             {
+                //Player 1 lost
+                if(board1.checkEnd())
+                {
+                    server.send(player1.getIP(), player1.getPort(), "RESULT: you loose");
+                    server.send(player2.getIP(), player2.getPort(), "RESULT: you win");
+                }
+                else if (board2.checkEnd()) 
+                {
+                    server.send(player2.getIP(), player2.getPort(), "RESULT: you loose");
+                    server.send(player1.getIP(), player1.getPort(), "RESULT: you win");
+                }
+                
                 endGame();
                 return;
             }
