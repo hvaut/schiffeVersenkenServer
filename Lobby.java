@@ -447,9 +447,26 @@ public class Lobby extends Server
             case "SHOOT":
                 User usr = getPlayer(pIP);
                 Game game = findGame(usr);
-                int x = Integer.parseInt(Message[1]);
+                
+                //TODO Check if this is the corret way how the position is being transmitted
+                int x = Integer.parseInt(Message[1]); 
                 int y = Integer.parseInt(Message[2]);
+                
                 game.shoot(x, y, usr);
+                break;
+            case "PLACE":
+                User usr1 = getPlayer(pIP);
+                Game game1 = findGame(usr1);
+                
+                //TODO Check if this is the corret way how the position is being transmitted, applies for all below
+                int x1 = Integer.parseInt(Message[1]);
+                int y1 = Integer.parseInt(Message[2]);
+                
+                int x2 = Integer.parseInt(Message[3]);
+                int y2 = Integer.parseInt(Message[4]);
+                
+                game1.place(x1, y1, x2, y2, usr1);     
+                break;
         }
     }
 
