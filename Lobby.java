@@ -444,6 +444,12 @@ public class Lobby extends Server
                     removePlayerSet(tmp);
                 }
                 break;
+            case "SHOOT":
+                User usr = getPlayer(pIP);
+                Game game = findGame(usr);
+                int x = Integer.parseInt(Message[1]);
+                int y = Integer.parseInt(Message[2]);
+                game.shoot(x, y, usr);
         }
     }
 
