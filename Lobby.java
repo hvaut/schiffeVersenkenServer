@@ -16,6 +16,7 @@ public class Lobby extends Server
      * An userlist to list all existing user
      * A List called playerLobby that includes every user who you can play with
      * A List called games that includes all active games
+     * A List called leaderboard that includes all user sorted by their score
      */
     public Lobby(int pPort)
     {
@@ -175,6 +176,10 @@ public class Lobby extends Server
         return leaderboard;
     }
 
+    /**
+     * Method sortLeaderboard sorts the leaderboard with quick sort
+     * @param pList is the list that gets sorted
+     */
     public void sortLeaderboard(List<User> pList){
         List<User> left = new List<User>();
         List<User> right = new List<User>();
@@ -190,7 +195,7 @@ public class Lobby extends Server
         pList.remove();
 
         while (pList.hasAccess()){
-            if (pivot.getScore() <= pList.getContent().getScore()){
+            if (pivot.getScore() >= pList.getContent().getScore()){
                 left.append(pList.getContent());
             }
             else{
@@ -447,24 +452,24 @@ public class Lobby extends Server
             case "SHOOT":
                 User usr = getPlayer(pIP);
                 Game game = findGame(usr);
-                
-                //TODO Check if this is the corret way how the position is being transmitted
+
+                //TODO Check if this is the correct way how the position is being transmitted
                 int x = Integer.parseInt(Message[1]); 
                 int y = Integer.parseInt(Message[2]);
-                
+
                 game.shoot(x, y, usr);
                 break;
             case "PLACE":
                 User usr1 = getPlayer(pIP);
                 Game game1 = findGame(usr1);
-                
-                //TODO Check if this is the corret way how the position is being transmitted, applies for all below
+
+                //TODO Check if this is the correct way how the position is being transmitted, applies for all below
                 int x1 = Integer.parseInt(Message[1]);
                 int y1 = Integer.parseInt(Message[2]);
-                
+
                 int x2 = Integer.parseInt(Message[3]);
                 int y2 = Integer.parseInt(Message[4]);
-                
+
                 game1.place(x1, y1, x2, y2, usr1);     
                 break;
         }
