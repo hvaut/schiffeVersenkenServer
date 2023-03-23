@@ -137,7 +137,7 @@ public class Game
                 }
             }
 
-            if(checkEnd())
+            if(checkEnd())//checks if the game has ended
             {
                 //Player 1 lost
                 if(board1.checkEnd())
@@ -186,6 +186,10 @@ public class Game
         return false;
     }
 
+    /**
+     * Methode endGame
+     * notifys the Server to end the game
+     */
     public void endGame()
     {
         server.endGame(player1, player2, board1.checkEnd());
