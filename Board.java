@@ -1,8 +1,8 @@
 /**
- * Beschreiben Sie hier die Klasse Board.
+ * This class stores all game data for a single board.
  * 
  * @author Max und Ole
- * @version 0.1
+ * @version 1
  */
 public class Board
 {   
@@ -143,13 +143,14 @@ public class Board
         return false;
     }
 
-    private void sinkShip(int x, int y) {
+    private int[] sinkShip(int x, int y) {
+        int[] updatedFields = new int[4];
         Ship ship = ((ShipField)field[x][y]).getShip();
         int y1 = ship.y1();
         int y2 = ship.y2();
         int x1 = ship.x1();
         int x2 = ship.x2();
-
+        //TODO Check out of bounds for water around the ship as well as the return box
         //Vertical Ship
         if(x1 == x2)
         {
@@ -192,6 +193,11 @@ public class Board
                 field[i][temp1].hit();
                 field[i][temp2].hit();
             }
-        }       
+        }
+        updatedFields[0] = x1-1;
+        updatedFields[1] = x2+1;
+        updatedFields[3] = y1-1;
+        updatedFields[4] = y2+1;
+        return updatedFields;
     }
 }

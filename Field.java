@@ -2,7 +2,7 @@
  * Ein abstraktes Feld
  * 
  * @author Ole und Max
- * @version 0.1
+ * @version 1
  */
 public abstract class Field
 {
@@ -16,9 +16,9 @@ public abstract class Field
     }
 
     /**
-     * Getter für Attribut hit
+     * Getter for attribute hit
      * 
-     * @return Gibt das Attribut hit zurück.       
+     * @return the attribute hit   
      */
     public boolean isHit()
     {
@@ -26,7 +26,7 @@ public abstract class Field
     }
     
     /**
-     * Setzt das Attribut hit auf true
+     * Set hit to true
      */
     public void hit()
     {
