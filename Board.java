@@ -158,12 +158,23 @@ public class Board
                 y1 = y2;
                 y2 = temp;
             }
-            var temp1 = x1--;
-            var temp2 = x1++;
-            //The Field below the ship
-            field[x1][y2+1].hit();
-            //Field above the ship
-            field[x1][y1-1].hit();
+            int temp1 = x1-1;
+            if(temp1<0) {
+                temp1 = 0;
+            }
+            int temp2 = x1+1;
+            if(temp2>10) {
+                temp2 = 10;
+            }
+
+            if(y2<10) {
+                //The Field below the ship
+                field[x1][y2+1].hit();
+            }
+            if(y1>0) {
+                //Field above the ship
+                field[x1][y1-1].hit();
+            }
             y1--;
             //The Fields on both sides of the ships
             for(int i = y1;i<=y2+1;i++)
@@ -179,12 +190,22 @@ public class Board
                 x1 = x2;
                 x2 = swap;
             }
-            var temp1 = y1--;
-            var temp2 = y1++;
-            //The Field below the ship
-            field[x1-1][y1].hit();
-            //Field above the ship
-            field[x2+1][y1].hit();
+            var temp1 = y1-1;
+            if(temp1<0) {
+                temp1 = 0;
+            }
+            var temp2 = y1+1;
+            if(temp2>10) {
+                temp2 = 10;
+            }
+            if(x1>0) {
+                //The Field above the ship
+                field[x1-1][y1].hit();
+            }
+            if(x2<10) {
+                //Field below the ship
+                field[x2+1][y1].hit();
+            }
             x1--;
             //The Fields on both sides of the ships
             for(int i = x1;i<=x2+1;i++)
@@ -207,6 +228,5 @@ public class Board
         updatedFields[3] = y1-1;
         updatedFields[4] = y2+1;
         return updatedFields;
-
     }
 }
