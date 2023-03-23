@@ -81,7 +81,6 @@ public class Game
             default:
                 return;
         }
-        //TODO Field update for each ship
     }
 
     /**
