@@ -24,7 +24,7 @@ public class Game
         otherPlayer = player2;
         board1 = new Board(player1, this);
         board2 = new Board(player2, this);
-        currentBoard = board1;
+        currentBoard = board2;
         server = _server;
     }
 
@@ -112,7 +112,7 @@ public class Game
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
                     break;
                 case SUNK:
-                    int[] temp = getSunkenShip();
+                    int[] temp = currentBoard.getSunkenShip(x, y);
                     int x1 = temp[0];
                     int x2 = temp[1];
                     int y1 = temp[2];
@@ -144,11 +144,11 @@ public class Game
                 if(player1==currentPlayer){
                     currentPlayer = player2;
                     otherPlayer = player1;
-                    currentBoard = board2;
+                    currentBoard = board1;
                 } else {
                     currentPlayer = player1;
                     otherPlayer = player2;
-                    currentBoard = board1;
+                    currentBoard = board2;
                 }
             }
 

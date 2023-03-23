@@ -90,5 +90,4 @@ public class User
     public void setGame(Game _game){
         game = _game;
     }
-
 }
