@@ -143,7 +143,7 @@ public class Board
         return false;
     }
 
-    private int[] sinkShip(int x, int y) {
+    public int[] sinkShip(int x, int y) {
         int[] updatedFields = new int[4];
         Ship ship = ((ShipField)field[x][y]).getShip();
         int y1 = ship.y1();
