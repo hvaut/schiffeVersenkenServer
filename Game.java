@@ -65,6 +65,12 @@ public class Game
                     }    
                 }
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "+PLACE" + shipString);
+                for(int i=x1;i<=x2;i++) {
+                    for(int j=y1;j<=y2;j++) {
+                        server.send(tempPlayer.getIP(), tempPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);
+                        //TODO get the right Field ID
+                    }    
+                }
                 return;
             case NOSHIP:
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship does not exist");
@@ -81,7 +87,6 @@ public class Game
             default:
                 return;
         }
-        //TODO Field update for each ship
     }
 
     /**
@@ -214,10 +219,5 @@ public class Game
     public User getPlayer2() 
     {
         return player2;
-    }
-
-    public Lobby getServer()
-    {
-        return server;
     }
 }

@@ -102,11 +102,11 @@ public class Board
     }
 
     /**
-     * Kommentar TODO
+     * Validates the shot and checks what has been hit
      * 
      * @param  x   The x Coordinate of the attempted shot
      * @param  y   The y Coordinate of the attempted shot
-     * @return  int 0: Failed to shoot, 1: Water, 2: Ship hit, 3: ship sunk
+     * @return  ShotEvent Enumeration Uses the enumeration for error handeling and client feedback
      */
     public ShotEvent processShot(int x, int y)
     {
@@ -116,7 +116,6 @@ public class Board
         field[x][y].hit();
         if(field[x][y]instanceof Water)  {
             return ShotEvent.MISS;
-            //FieldUpdate
         } else if(field[x][y]instanceof ShipField)
         {
             Ship ship = ((ShipField)field[x][y]).getShip();
@@ -134,7 +133,6 @@ public class Board
             //Reduce the ships length because it directly corrolates to the amount of available fields
             ship.reduceLength();
             return ShotEvent.HIT;
-            //Fieldupdate
         }
         return ShotEvent.FAILED;
     }
