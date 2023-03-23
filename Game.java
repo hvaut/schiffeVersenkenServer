@@ -112,7 +112,7 @@ public class Game
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
                     break;
                 case SUNK:
-                    int[] temp = currentBoard.sinkShip(x, y);
+                    int[] temp = getSunkenShip();
                     int x1 = temp[0];
                     int x2 = temp[1];
                     int y1 = temp[2];
@@ -178,6 +178,14 @@ public class Game
         }
     }
 
+    /**
+     * Methode sinkShip
+     * marks the fields around the sunken ship
+     * @param x1 
+     * @param x2 
+     * @param y1 
+     * @param y2 
+     */
     public void sinkShip(int x1, int x2, int y1, int y2)
     {
         //mark fields around the ship
