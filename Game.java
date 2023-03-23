@@ -112,6 +112,18 @@ public class Game
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
                     break;
                 case SUNK:
+                    int x1 = 1;//board.getX1();
+                    int x2 = 1;//board.getX2();
+                    int y1 = 1;
+                    int y2 = 1;
+                    for(int i=x1;i<=x2;i++) {
+                        for(int j=y1;j<=y2;j++) {
+                            //Update the current Player
+                            server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":2:" + result);//2 = board of the enemy
+                            //Update the other Player
+                            server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);// 1 = own board
+                        }    
+                    }
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
                     break;
                 default:
