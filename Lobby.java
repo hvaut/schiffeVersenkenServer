@@ -1,6 +1,6 @@
 /**
  * @author Nikita Funk und John Braun
- * @version 16.03.2023
+ * @version 23.03.2023
  */
 public class Lobby extends Server
 {
