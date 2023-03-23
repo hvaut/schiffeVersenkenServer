@@ -375,6 +375,11 @@ public class Lobby extends Server
         }
     }
 
+    /**
+     * Method startRematch finds the right PlayerSet, so we know which two users will start a rematch
+     *
+     * @param p1 is one of the two users
+     */
     public void startRematch(User p1){
         rematch.toFirst();
         while(rematch.hasAccess()){
