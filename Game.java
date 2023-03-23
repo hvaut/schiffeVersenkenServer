@@ -58,6 +58,12 @@ public class Game
                 {
                     shipString += ":" + ships[i];
                 }
+                for(int i=x1;i<=x2;i++) {
+                    for(int j=y1;j<=y2;j++) {
+                        server.send(tempPlayer.getIP(), tempPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);
+                        //TODO get the right Field ID
+                    }    
+                }
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "+PLACE" + shipString);
                 for(int i=x1;i<=x2;i++) {
                     for(int j=y1;j<=y2;j++) {
@@ -112,26 +118,26 @@ public class Game
                     break;
             }
 
-            if(!ShotEvent.FAILED.equals(result))
+            if(!ShotEvent.FAILED.equals(result))//following code is only executed if the shot was legal
             {
                 //Update the current Player
                 server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":2:" + result);//2 = board of the enemy
                 //Update the other Player
                 server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x + ":" + y + ":1:" + result);// 1 = own board
+
+                //changes the active player
+                if(player1==currentPlayer){
+                    currentPlayer = player2;
+                    otherPlayer = player1;
+                    currentBoard = board2;
+                } else {
+                    currentPlayer = player1;
+                    otherPlayer = player2;
+                    currentBoard = board1;
+                }
             }
 
-            //changes the active player
-            if(player1==currentPlayer){
-                currentPlayer = player2;
-                otherPlayer = player1;
-                currentBoard = board2;
-            } else {
-                currentPlayer = player1;
-                otherPlayer = player2;
-                currentBoard = board1;
-            }
-
-            if(checkEnd())
+            if(checkEnd())//checks if the game has ended
             {
                 //Player 1 lost
                 if(board1.checkEnd())
@@ -180,6 +186,10 @@ public class Game
         return false;
     }
 
+    /**
+     * Methode endGame
+     * notifys the Server to end the game
+     */
     public void endGame()
     {
         server.endGame(player1, player2, board1.checkEnd());
