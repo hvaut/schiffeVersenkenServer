@@ -214,9 +214,4 @@ public class Game
     {
         return player2;
     }
-
-    public Lobby getServer()
-    {
-        return server;
-    }
 }
