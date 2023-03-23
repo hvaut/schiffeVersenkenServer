@@ -24,7 +24,7 @@ public class Game
         otherPlayer = player2;
         board1 = new Board(player1, this);
         board2 = new Board(player2, this);
-        currentBoard = board1;
+        currentBoard = board2;
         server = _server;
     }
 
@@ -112,6 +112,21 @@ public class Game
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: hit");
                     break;
                 case SUNK:
+                    int[] temp = getSunkenShip();
+                    int x1 = temp[0];
+                    int x2 = temp[1];
+                    int y1 = temp[2];
+                    int y2 = temp[3];
+                    sinkShip(x1, x2, y1, y2);
+                    //mark ship
+                    for(int i = x1 + 1; i <= x2 - 1; i++) {
+                        for(int j = y1 + 1; j <= y2 - 1; j++) {
+                            //Update the current Player
+                            server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":2:" + result);//2 = board of the enemy
+                            //Update the other Player
+                            server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);// 1
+                        }    
+                    }
                     server.send(currentPlayer.getIP(), currentPlayer.getPort(), "+SHOOT: ship down");
                     break;
                 default:
@@ -129,11 +144,11 @@ public class Game
                 if(player1==currentPlayer){
                     currentPlayer = player2;
                     otherPlayer = player1;
-                    currentBoard = board2;
+                    currentBoard = board1;
                 } else {
                     currentPlayer = player1;
                     otherPlayer = player2;
-                    currentBoard = board1;
+                    currentBoard = board2;
                 }
             }
 
@@ -160,6 +175,55 @@ public class Game
         else
         {
             server.send(player.getIP(), player.getPort(), "-SHOOT:Not your turn");
+        }
+    }
+
+    /**
+     * Methode sinkShip
+     * marks the fields around the sunken ship
+     * @param x1 
+     * @param x2 
+     * @param y1 
+     * @param y2 
+     */
+    public void sinkShip(int x1, int x2, int y1, int y2)
+    {
+        //mark fields around the ship
+        if((y1 > -1) && (y1 < 11))
+        {
+            for(int i=x1;i<=x2;i++) {
+                //Update the current Player
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + i + ":" + y1 + ":2:" + ShotEvent.MISS);//2 = board of the enemy
+                //Update the other Player
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + i + ":" + y1 + ":1:" + ShotEvent.MISS);// 1 = own board   
+            }
+        }
+        if((y2 > -1) && (y2 < 11))
+        {
+            for(int i=x1;i<=x2;i++) {
+                //Update the current Player
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + i + ":" + y2 + ":2:" + ShotEvent.MISS);//2 = board of the enemy
+                //Update the other Player
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + i + ":" + y2 + ":1:" + ShotEvent.MISS);// 1 = own board   
+            }
+        }
+        if((x1 > -1) && (x1 < 11))
+        {
+            for(int i=y1;i<=y2;i++) {
+                //Update the current Player
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x1 + ":" + i + ":2:" + ShotEvent.MISS);//2 = board of the enemy
+                //Update the other Player
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x1 + ":" + i + ":1:" + ShotEvent.MISS);// 1 = own board   
+            }
+        }
+        if((x2 > -1) && (x2 < 11))
+        {
+            for(int i=x1;i<=x2;i++) {
+                //Update the current Player
+                server.send(currentPlayer.getIP(), currentPlayer.getPort(), "FIELDUPDATE:" + x2 + ":" + i + ":2:" + ShotEvent.MISS);//2 = board of the enemy
+                //Update the other Player
+                server.send(otherPlayer.getIP(), otherPlayer.getPort(), "FIELDUPDATE:" + x2 + ":" + i + ":1:" + ShotEvent.MISS);// 1 = own board   
+            }
         }
     }
 

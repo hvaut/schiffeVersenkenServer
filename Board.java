@@ -1,8 +1,8 @@
 /**
- * Beschreiben Sie hier die Klasse Board.
+ * This class stores all game data for a single board.
  * 
  * @author Max und Ole
- * @version 0.1
+ * @version 1
  */
 public class Board
 {   
@@ -75,12 +75,12 @@ public class Board
         Ship pShip = new Ship(x1,x2,y1,y2);
         var event = checkPlacement(pShip);
         if(PlacementEvent.SHIP.equals(event)){
-            
+
             for(int i=x1;i<=x2;i++) {
                 for(int j=y1;j<=y2;j++) {
                     field[i][j] = new ShipField(pShip);
                     //Update PLACE
-                    
+
                 }    
             }
         }
@@ -149,7 +149,7 @@ public class Board
         int y2 = ship.y2();
         int x1 = ship.x1();
         int x2 = ship.x2();
-
+        //TODO Check out of bounds for water around the ship as well as the return box
         //Vertical Ship
         if(x1 == x2)
         {
@@ -192,6 +192,21 @@ public class Board
                 field[i][temp1].hit();
                 field[i][temp2].hit();
             }
-        }       
+        }
+    }
+
+    public int[] getSunkenShip(int x, int y) {
+        int[] updatedFields = new int[4];
+        Ship ship = ((ShipField)field[x][y]).getShip();
+        int y1 = ship.y1();
+        int y2 = ship.y2();
+        int x1 = ship.x1();
+        int x2 = ship.x2();
+        updatedFields[0] = x1-1;
+        updatedFields[1] = x2+1;
+        updatedFields[3] = y1-1;
+        updatedFields[4] = y2+1;
+        return updatedFields;
+
     }
 }

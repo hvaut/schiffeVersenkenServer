@@ -1,6 +1,6 @@
 /**
  * @author Nikita Funk und John Braun
- * @version 16.03.2023
+ * @version 23.03.2023
  */
 public class Lobby extends Server
 {
@@ -13,10 +13,9 @@ public class Lobby extends Server
     /**
      * Constructor for objects from class Lobby
      * Includes:
-     * An userlist to list all existing user
+     * An userlist to list all existing user. Can be sorted by their score
      * A List called playerLobby that includes every user who you can play with
      * A List called games that includes all active games
-     * A List called leaderboard that includes all user sorted by their score
      */
     public Lobby(int pPort)
     {
@@ -25,7 +24,6 @@ public class Lobby extends Server
         playerLobby = new List<User>();
         games = new List<Game>();
         rematch = new List<PlayerSet>();
-        leaderboard = new List<User>();
     }
 
     /**
@@ -207,7 +205,7 @@ public class Lobby extends Server
 
         if (i <= 1){
             left.concat(right);
-            leaderboard = left;
+            userlist = left;
         }
         else{
             sortLeaderboard(left);
