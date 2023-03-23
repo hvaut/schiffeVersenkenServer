@@ -81,7 +81,6 @@ public class Game
             default:
                 return;
         }
-        //TODO Field update for each ship
     }
 
     /**
@@ -214,10 +213,5 @@ public class Game
     public User getPlayer2() 
     {
         return player2;
-    }
-
-    public Lobby getServer()
-    {
-        return server;
     }
 }
