@@ -49,12 +49,6 @@ public class Game
             tempBoard = board2;
         }
         PlacementEvent result = tempBoard.placeShip(x1,y1,x2,y2);//saves the success of the placement
-        for(int i=x1;i<=x2;i++) {
-            for(int j=y1;j<=y2;j++) {
-                server.send(tempPlayer.getIP(), tempPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);
-                //TODO get the right Field ID
-            }    
-        }
         switch(result)
         {
             case SHIP:
@@ -65,6 +59,12 @@ public class Game
                     shipString += ":" + ships[i];
                 }
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "+PLACE" + shipString);
+                for(int i=x1;i<=x2;i++) {
+                    for(int j=y1;j<=y2;j++) {
+                        server.send(tempPlayer.getIP(), tempPlayer.getPort(), "FIELDUPDATE:" + i + ":" + j + ":1:" + result);
+                        //TODO get the right Field ID
+                    }    
+                }
                 return;
             case NOSHIP:
                 server.send(tempPlayer.getIP(), tempPlayer.getPort(), "-PLACE: ship does not exist");
@@ -145,7 +145,7 @@ public class Game
                     server.send(player2.getIP(), player2.getPort(), "RESULT: you loose");
                     server.send(player1.getIP(), player1.getPort(), "RESULT: you win");
                 }
-                
+
                 endGame();
                 return;
             }
