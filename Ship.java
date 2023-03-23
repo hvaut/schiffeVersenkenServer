@@ -2,7 +2,7 @@
  * A ship with its start- and endposition
  * 
  * @author Ole und Max
- * @version 0.1
+ * @version 1
  */
 public class Ship
 {
